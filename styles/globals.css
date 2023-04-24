@@ -1,27 +1,276 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+/* @font-face {
+  font-family: "GeneralSans";
+  src: url('../public/fonts/GeneralSans-Variable.woff');
+  font-weight: normal;
+  font-style: normal;
+} */
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+body{
+  background: #F7F6F0;
+}
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #6B5AED;
+}
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, #6B5AED 0%, #8D7EFF 100%);
+  border-radius: 10px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+.dm-sans{
+  font-family: 'DM Sans', sans-serif;
+}
+.ps-submenu-content{
+  background-color: #6B5AED !important;
+}
+.css-12vkui9 .ps-menu-button:hover{
+  background: none !important;
+}
+.ps-menuitem-root:hover{
+  background-color: #6151DD !important;
+  color: white !important;
+  border-radius: 10px !important;
+  font-weight: bold !important;
+}
+.css-1wvake5.ps-broken.ps-toggled{
+  background:linear-gradient(90deg, #6B5AED 0%, #8D7EFF 100%) !important;
+}
+.inter{
+  font-family: 'Inter', sans-serif;
+}
+.g-sans{
+  font-family: "GeneralSans", sans-serif;
+}
+input:focus-within {
+  background: transparent !important;
+  /* and any style you want to reset */
+}
+@layer components {
+  .box {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
   }
-}
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  @media (min-width: 576px) {
+    .box {
+      width: 540px;
+    }
+  }
+  @media (min-width: 768px) {
+    .box {
+      width: 720px;
+    }
+  }
+  @media (min-width: 958px) {
+    .box {
+      width: 880px;
+    }
+  }
+  @media (min-width: 992px) {
+    .box {
+      width: 960px;
+    }
+  }
+  @media (min-width: 1200px) {
+    .box {
+      width: 1140px;
+    }
+  }
+  @media (min-width: 1400px) {
+    .box {
+      width: 1360px;
+    }
+  }
+  @media (min-width: 1600px) {
+    .box {
+      width: 1460px;
+    }
+  }
+  .fw-300 {
+    font-weight: 300;
+  }
+  .fw-400 {
+    font-weight: 400;
+  }
+  .fw-500 {
+    font-weight: 500;
+  }
+  .fw-600 {
+    font-weight: 600;
+  }
+  .fw-700 {
+    font-weight: 700;
+  }
+  .fw-800 {
+    font-weight: 800;
+  }
+  .fw-900 {
+    font-weight: 900;
+  }
+  .fs-400 {
+    font-size: 14px;
+  }
+  .fs-200 {
+    font-size: 12px;
+  }
+  .fs-300 {
+    font-size: 13px;
+  }
+  .fs-500 {
+    font-size: 15px;
+  }
+  .fs-600 {
+    font-size: 16px;
+  }
+  .fs-700 {
+    font-size: 17px;
+  }
+  .fs-800 {
+    font-size: 18px;
+  }
+  .bg-white {
+    background: #fff;
+  }
+  .section {
+    padding: 80px 0px;
+  }
+  @media (max-width: 1000px) {
+    .section {
+      padding: 60px 0px;
+    }
+  }
+  .w-45{
+    width: 20px;
+  }
+  .w-180{
+    width: 120%;
+  }
+  .scroll-pro::-webkit-scrollbar {
+      width: 6px;
+      height: 0px;
+  }
+  .bg-home{
+    background: #F7F6F0;
+  }
+  .bg-modal{
+    background-color: rgba(139, 122, 122, 0.6);
+  }
+  .text-white {
+    color: #fff !important;
+  }
+  .bg-black {
+    background: #000000;
+  }
+  .bg-primary{
+    background: #6B5AED;
+  }
+  .text-primary{
+    color: #6B5AED;
+  }
+  .bg-secondary{
+    background: linear-gradient(90deg, #6B5AED 0%, #8D7EFF 100%);
+  }
+  .bg-input{
+    background: #EFF2F6;
+  }
+  .text-input{
+    color: #828282;
+  }
+  .btn-primary{
+    color:#fff;
+    font-weight: 500;
+    border-radius: 5px;
+    background: linear-gradient(90deg, #6B5AED 0%, #8D7EFF 100%);
+  }
+  .bg-light{
+    background: #6B5AED0D;
+  }
+  .bg-milk{
+    background: #DEEBFF;
+  }
+  .bg-dash{
+    background: #F8F8FA;
+  }
+  .btn-disabled{
+    background: #BFBCE8;
+    color:#fff;
+    font-weight: 500;
+    border-radius: 5px;
+  }
+  .text-black {
+    color: #000000;
+  }
+  .menu {
+    position: absolute;
+    z-index: 100;
+    background-color: white;
+    animation: menu 0.3s ease-in-out;
+  }
+  @keyframes menu {
+    from {
+      left: -400px;
+    }
+    to {
+      left: 0px;
+    }
+  }
+  .dashboard-grid{
+    width: 100%;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 250px calc(100% - 250px);
+  }
+  .w-150{
+    width: 150%;
+  }
+  .h-01{
+    height: 400px;
+  }
+  .text-blac{
+    color: #172B4D;
+  }
+  .circle{
+    border-radius: 50%
+  }
+  .bord-b{
+    border-bottom: 5px solid;
+  }
+  .shade{
+    box-shadow: rgba(99, 99, 99, 0.1) 0px 2px 8px 0px;
+  }
+  .index-30{
+    z-index: 30000;
+  }
+  .index-40{
+    z-index: 40000;
+  }
+  .index-50{
+    z-index: 50000;
+  }
 }
