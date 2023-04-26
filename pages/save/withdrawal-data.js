@@ -1,7 +1,7 @@
-import WithdrawalDataTable from '@/components/admin/save/tables/WithdrawalsData';
-import Layout from '@/components/layouts/admin/Layout'
-import Link from 'next/link';
 import React from 'react'
+import Layout from '@/components/layout/Layout';
+import WithdrawalDataTable from '@/components/save/tables/WithdrawalsData';
+import Link from 'next/link';
 import { BsDownload, BsFilter } from 'react-icons/bs';
 import { MdKeyboardArrowRight } from 'react-icons/md';
 

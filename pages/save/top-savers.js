@@ -1,7 +1,7 @@
-import TopSavers from '@/components/admin/save/tables/TopSavers';
-import Layout from '@/components/layouts/admin/Layout'
-import Link from 'next/link';
 import React from 'react'
+import Layout from '@/components/layout/Layout';
+import TopSavers from '@/components/save/tables/TopSavers';
+import Link from 'next/link';
 import { BsDownload, BsFilter } from 'react-icons/bs';
 import { MdKeyboardArrowRight } from 'react-icons/md';
 

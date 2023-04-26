@@ -1,7 +1,7 @@
-import SaversDataTable from '@/components/admin/save/tables/SaversData';
-import Layout from '@/components/layouts/admin/Layout'
-import Link from 'next/link';
 import React from 'react'
+import Layout from '@/components/layout/Layout';
+import SaversDataTable from '@/components/save/tables/SaversData';
+import Link from 'next/link';
 import { BsDownload, BsFilter } from 'react-icons/bs';
 import { MdKeyboardArrowRight } from 'react-icons/md';
 
