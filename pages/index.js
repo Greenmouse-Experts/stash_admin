@@ -68,9 +68,11 @@ const Login = () => {
                   </p>
                 </div>
                 <div className="mt-12">
+                <Link href='dashboard'>
                   <button className="py-3 lg:text-lg w-full btn-primary">
-                    <Link href='dashboard'>Login</Link>
+                    Login
                   </button>
+                  </Link>
                 </div>
               </form>
             </div>
