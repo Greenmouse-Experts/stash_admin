@@ -51,7 +51,7 @@ const SavePage = () => {
   return (
     <Layout>
         <div className='w-full'>
-            <div className='text-3xl fw-600'>Save</div>
+            <div className='text-3xl fw-600'>Savings</div>
             <div className='lg:flex mt-12'>
                 <div className='lg:w-5/12 lg:pr-4'>
                     <div className='p-8 lg:pb-12 bg-white shade rounded-md'>
