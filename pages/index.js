@@ -1,7 +1,7 @@
 "use client";
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 import { AiOutlineMail } from "react-icons/ai";
 import { MdLockOutline } from "react-icons/md";
 import { Button } from "@/components/UI/button";
@@ -14,11 +14,13 @@ import { encryptPayload } from "@/services/helpers";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import getCallBackRoute from "@/hooks/getCallBackRoute";
+import { HashSpinner } from "@/components/UI/spinners";
+
 
 const Login = () => {
-
-  const dispatch = useDispatch()
-  const router = useRouter()
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const [isBusy, setIsBusy] = useState(false);
   const {
     control,
     handleSubmit,
@@ -34,11 +36,11 @@ const Login = () => {
   const [login] = useLazyLoginQuery();
 
   const onSubmit = async (data) => {
-    let payload = encryptPayload(data)
+    setIsBusy(true);
+    let payload = encryptPayload(data);
     await login(payload)
       .then((res) => {
-        if (res.isSuccess
-          ) {
+        if (res.isSuccess) {
           dispatch(
             saveUser({
               userId: res.data.data.profile.user_id,
@@ -51,16 +53,18 @@ const Login = () => {
             })
           );
           toast.success(res.data.msg);
+          setIsBusy(false);
           router.push(getCallBackRoute(router.asPath));
         }
 
         if (res.isError) {
           toast.error(res.error.data.msg);
+          setIsBusy(false);
         }
       })
       .catch((err) => {
-        console.log(err);
         toast.error("Login Failed");
+        setIsBusy(false);
       });
   };
 
@@ -134,7 +138,7 @@ const Login = () => {
                   />
                 </div>
                 <div className="mt-12">
-                  <Button title="Login" disabled={!isValid} />
+                  <Button title={isBusy? <HashSpinner size={25} color="white"/> : "Login"} disabled={!isValid} />
                 </div>
               </form>
             </div>
