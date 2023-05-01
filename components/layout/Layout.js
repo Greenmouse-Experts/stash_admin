@@ -4,6 +4,7 @@ import { ProSidebarProvider } from "react-pro-sidebar";
 import Footer from "./Footer";
 import Header from "./Header";
 import SidebarLayout from "./Sidebar";
+import WithAuth from "./WithAuth";
 
 
 const Layout = ({ children }) => {
@@ -15,7 +16,7 @@ const Layout = ({ children }) => {
                 <SidebarLayout/>
             </div>
             <div className='relative'>
-                <div className='fixed index-30 top-0 bg-white w-full lg:pr-60 shadow'>
+                <div className='fixed index-20 top-0 bg-white w-full lg:pr-60 shadow'>
                     <Header/>
                 </div>
                 <div className='bg-dash mt-16 py-10 min-h-screen px-3 lg:px-6'>
@@ -30,4 +31,4 @@ const Layout = ({ children }) => {
   );
 };
 
-export default Layout;
+export default WithAuth(Layout);

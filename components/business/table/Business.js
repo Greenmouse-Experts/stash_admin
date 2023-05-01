@@ -2,6 +2,13 @@ import React from "react";
 import { AiOutlineDownload } from "react-icons/ai";
 import { BsFilter, BsThreeDots } from "react-icons/bs";
 import { FiEye } from "react-icons/fi";
+import {
+  Menu,
+  MenuHandler,
+  MenuItem,
+  MenuList,
+  Button,
+} from "../../UI/dropdown";
 
 export const BusinessTable = () => {
   return (
@@ -233,7 +240,22 @@ export const BusinessTable = () => {
                 </p>
               </td>
               <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-                <BsThreeDots />
+                <Menu placement="bottom-end">
+                  <MenuHandler>
+                    <Button className="bg-transparent px-0 mx-0 hover:shadow-none text-md flex items-center font-normal shadow-none text-black capitalize">
+                      <BsThreeDots className="text-xl" />
+                    </Button>
+                  </MenuHandler>
+                  <MenuList>
+                    <MenuItem>Edit</MenuItem>
+                    <MenuItem>Requested</MenuItem>
+                    <MenuItem>Approved</MenuItem>
+                    <MenuItem>Declined</MenuItem>
+                    <MenuItem>Ongoing</MenuItem>
+                    <MenuItem>Flag</MenuItem>
+                    <MenuItem>Restrict</MenuItem>
+                  </MenuList>
+                </Menu>
               </td>
             </tr>
             <tr className="font-medium">
@@ -308,7 +330,22 @@ export const BusinessTable = () => {
                 </p>
               </td>
               <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-                <BsThreeDots />
+                <Menu placement="bottom-end">
+                  <MenuHandler>
+                    <Button className="bg-transparent px-0 mx-0 hover:shadow-none text-md flex items-center font-normal shadow-none text-black capitalize">
+                      <BsThreeDots className="text-xl" />
+                    </Button>
+                  </MenuHandler>
+                  <MenuList>
+                    <MenuItem>Edit</MenuItem>
+                    <MenuItem>Requested</MenuItem>
+                    <MenuItem>Approved</MenuItem>
+                    <MenuItem>Declined</MenuItem>
+                    <MenuItem>Ongoing</MenuItem>
+                    <MenuItem>Flag</MenuItem>
+                    <MenuItem>Restrict</MenuItem>
+                  </MenuList>
+                </Menu>
               </td>
             </tr>
             <tr className="font-medium">
@@ -383,7 +420,22 @@ export const BusinessTable = () => {
                 </p>
               </td>
               <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-                <BsThreeDots />
+                <Menu placement="bottom-end">
+                  <MenuHandler>
+                    <Button className="bg-transparent px-0 mx-0 hover:shadow-none text-md flex items-center font-normal shadow-none text-black capitalize">
+                      <BsThreeDots className="text-xl" />
+                    </Button>
+                  </MenuHandler>
+                  <MenuList>
+                    <MenuItem>Edit</MenuItem>
+                    <MenuItem>Requested</MenuItem>
+                    <MenuItem>Approved</MenuItem>
+                    <MenuItem>Declined</MenuItem>
+                    <MenuItem>Ongoing</MenuItem>
+                    <MenuItem>Flag</MenuItem>
+                    <MenuItem>Restrict</MenuItem>
+                  </MenuList>
+                </Menu>
               </td>
             </tr>
             <tr className="font-medium">
@@ -458,7 +510,22 @@ export const BusinessTable = () => {
                 </p>
               </td>
               <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-                <BsThreeDots />
+                <Menu placement="bottom-end">
+                  <MenuHandler>
+                    <Button className="bg-transparent px-0 mx-0 hover:shadow-none text-md flex items-center font-normal shadow-none text-black capitalize">
+                      <BsThreeDots className="text-xl" />
+                    </Button>
+                  </MenuHandler>
+                  <MenuList>
+                    <MenuItem>Edit</MenuItem>
+                    <MenuItem>Requested</MenuItem>
+                    <MenuItem>Approved</MenuItem>
+                    <MenuItem>Declined</MenuItem>
+                    <MenuItem>Ongoing</MenuItem>
+                    <MenuItem>Flag</MenuItem>
+                    <MenuItem>Restrict</MenuItem>
+                  </MenuList>
+                </Menu>
               </td>
             </tr>
             <tr className="font-medium">
@@ -533,7 +600,22 @@ export const BusinessTable = () => {
                 </p>
               </td>
               <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-                <BsThreeDots />
+                <Menu placement="bottom-end">
+                  <MenuHandler>
+                    <Button className="bg-transparent px-0 mx-0 hover:shadow-none text-md flex items-center font-normal shadow-none text-black capitalize">
+                      <BsThreeDots className="text-xl" />
+                    </Button>
+                  </MenuHandler>
+                  <MenuList>
+                    <MenuItem>Edit</MenuItem>
+                    <MenuItem>Requested</MenuItem>
+                    <MenuItem>Approved</MenuItem>
+                    <MenuItem>Declined</MenuItem>
+                    <MenuItem>Ongoing</MenuItem>
+                    <MenuItem>Flag</MenuItem>
+                    <MenuItem>Restrict</MenuItem>
+                  </MenuList>
+                </Menu>
               </td>
             </tr>
             <tr className="font-medium">
@@ -608,7 +690,22 @@ export const BusinessTable = () => {
                 </p>
               </td>
               <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-                <BsThreeDots />
+                <Menu placement="bottom-end">
+                  <MenuHandler>
+                    <Button className="bg-transparent px-0 mx-0 hover:shadow-none text-md flex items-center font-normal shadow-none text-black capitalize">
+                      <BsThreeDots className="text-xl" />
+                    </Button>
+                  </MenuHandler>
+                  <MenuList>
+                    <MenuItem>Edit</MenuItem>
+                    <MenuItem>Requested</MenuItem>
+                    <MenuItem>Approved</MenuItem>
+                    <MenuItem>Declined</MenuItem>
+                    <MenuItem>Ongoing</MenuItem>
+                    <MenuItem>Flag</MenuItem>
+                    <MenuItem>Restrict</MenuItem>
+                  </MenuList>
+                </Menu>
               </td>
             </tr>
           </tbody>

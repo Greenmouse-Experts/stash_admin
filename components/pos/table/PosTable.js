@@ -1,12 +1,17 @@
-import React from 'react'
-import { AiOutlineDownload } from "react-icons/ai";
+import React from "react";
 import { BsFilter, BsThreeDots } from "react-icons/bs";
-import { FiEye } from "react-icons/fi";
+import {
+  Menu,
+  MenuHandler,
+  MenuItem,
+  MenuList,
+  Button,
+} from "../../UI/dropdown";
 
 export const PosTable = () => {
   return (
     <div>
-        <div className="flex justify-end items-center">
+      <div className="flex justify-end items-center">
         <div className="lg:flex gap-x-4 items-center text-end lg:text-left">
           <p className="flex mt-3 lg:mt-0 items-center border border-gray-400 px-3 cursor-pointer rounded-md fw-500">
             Filter <BsFilter className="ml-1" />
@@ -129,7 +134,19 @@ export const PosTable = () => {
                 Epe, Lagos
               </td>
               <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-                <BsThreeDots />
+                <Menu placement="bottom-end">
+                  <MenuHandler>
+                    <Button className="bg-transparent px-0 mx-0 hover:shadow-none text-md flex items-center font-normal shadow-none text-black capitalize">
+                      <BsThreeDots className="text-xl" />
+                    </Button>
+                  </MenuHandler>
+                  <MenuList>
+                    <MenuItem>Deployed</MenuItem>
+                    <MenuItem>Active</MenuItem>
+                    <MenuItem>Inactive</MenuItem>
+                    <MenuItem>Retrived</MenuItem>
+                  </MenuList>
+                </Menu>
               </td>
             </tr>
             <tr className="font-medium">
@@ -169,7 +186,19 @@ export const PosTable = () => {
                 Epe, Lagos
               </td>
               <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-                <BsThreeDots />
+                <Menu placement="bottom-end">
+                  <MenuHandler>
+                    <Button className="bg-transparent px-0 mx-0 hover:shadow-none text-md flex items-center font-normal shadow-none text-black capitalize">
+                      <BsThreeDots className="text-xl" />
+                    </Button>
+                  </MenuHandler>
+                  <MenuList>
+                    <MenuItem>Deployed</MenuItem>
+                    <MenuItem>Active</MenuItem>
+                    <MenuItem>Inactive</MenuItem>
+                    <MenuItem>Retrived</MenuItem>
+                  </MenuList>
+                </Menu>
               </td>
             </tr>
             <tr className="font-medium">
@@ -209,7 +238,19 @@ export const PosTable = () => {
                 Epe, Lagos
               </td>
               <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-                <BsThreeDots />
+                <Menu placement="bottom-end">
+                  <MenuHandler>
+                    <Button className="bg-transparent px-0 mx-0 hover:shadow-none text-md flex items-center font-normal shadow-none text-black capitalize">
+                      <BsThreeDots className="text-xl" />
+                    </Button>
+                  </MenuHandler>
+                  <MenuList>
+                    <MenuItem>Deployed</MenuItem>
+                    <MenuItem>Active</MenuItem>
+                    <MenuItem>Inactive</MenuItem>
+                    <MenuItem>Retrived</MenuItem>
+                  </MenuList>
+                </Menu>
               </td>
             </tr>
             <tr className="font-medium">
@@ -249,7 +290,19 @@ export const PosTable = () => {
                 Epe, Lagos
               </td>
               <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-                <BsThreeDots />
+                <Menu placement="bottom-end">
+                  <MenuHandler>
+                    <Button className="bg-transparent px-0 mx-0 hover:shadow-none text-md flex items-center font-normal shadow-none text-black capitalize">
+                      <BsThreeDots className="text-xl" />
+                    </Button>
+                  </MenuHandler>
+                  <MenuList>
+                    <MenuItem>Deployed</MenuItem>
+                    <MenuItem>Active</MenuItem>
+                    <MenuItem>Inactive</MenuItem>
+                    <MenuItem>Retrived</MenuItem>
+                  </MenuList>
+                </Menu>
               </td>
             </tr>
             <tr className="font-medium">
@@ -289,7 +342,19 @@ export const PosTable = () => {
                 Epe, Lagos
               </td>
               <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-                <BsThreeDots />
+                <Menu placement="bottom-end">
+                  <MenuHandler>
+                    <Button className="bg-transparent px-0 mx-0 hover:shadow-none text-md flex items-center font-normal shadow-none text-black capitalize">
+                      <BsThreeDots className="text-xl" />
+                    </Button>
+                  </MenuHandler>
+                  <MenuList>
+                    <MenuItem>Deployed</MenuItem>
+                    <MenuItem>Active</MenuItem>
+                    <MenuItem>Inactive</MenuItem>
+                    <MenuItem>Retrived</MenuItem>
+                  </MenuList>
+                </Menu>
               </td>
             </tr>
             <tr className="font-medium">
@@ -329,12 +394,24 @@ export const PosTable = () => {
                 Epe, Lagos
               </td>
               <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-                <BsThreeDots />
+                <Menu placement="bottom-end">
+                  <MenuHandler>
+                    <Button className="bg-transparent px-0 mx-0 hover:shadow-none text-md flex items-center font-normal shadow-none text-black capitalize">
+                      <BsThreeDots className="text-xl" />
+                    </Button>
+                  </MenuHandler>
+                  <MenuList>
+                    <MenuItem>Deployed</MenuItem>
+                    <MenuItem>Active</MenuItem>
+                    <MenuItem>Inactive</MenuItem>
+                    <MenuItem>Retrived</MenuItem>
+                  </MenuList>
+                </Menu>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
-  )
-}
+  );
+};

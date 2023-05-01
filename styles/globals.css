@@ -31,6 +31,21 @@ body{
   border-radius: 10px;
 }
 
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  border: transparent;
+  -webkit-text-fill-color: #6B5AED;
+  -webkit-box-shadow: 0 0 0px 1000px #EFF2F6 inset;
+  background-color: transparent;
+}
+
 /* Handle */
 ::-webkit-scrollbar-thumb {
   background: linear-gradient(90deg, #6B5AED 0%, #8D7EFF 100%);
@@ -67,7 +82,12 @@ a {
 }
 input:focus-within {
   background: transparent !important;
-  /* and any style you want to reset */
+}
+.Toastify__toast-container {
+  z-index: 30000 !important;
+}
+.Toastify__toast-theme--colored.Toastify__toast--success {
+  background-color: linear-gradient(90deg, #6B5AED 0%, #8D7EFF 100%)  !important;
 }
 @layer components {
   .box {
@@ -263,6 +283,9 @@ input:focus-within {
   }
   .shade{
     box-shadow: rgba(99, 99, 99, 0.1) 0px 2px 8px 0px;
+  }
+  .index-20{
+    z-index: 20000;
   }
   .index-30{
     z-index: 30000;

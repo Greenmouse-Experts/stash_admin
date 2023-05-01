@@ -8,12 +8,12 @@ const PosPage = () => {
       <div className="w-full">
         <div className="text-3xl fw-600">POS</div>
         <div className="mt-12">
-          <div className="w-full grid grid-cols-2 jusitfy-between items-end">
+          <div className="w-full grid grid-cols-3 lg:grid-cols-2 jusitfy-between items-end">
             <div>
               <p className="px-6 fw-500">Requests</p>
               <p className="mt-2 w-24 ml-3 w-16 lg:w-24 h-1 bg-primary rounded"></p>
             </div>
-            <div className="flex mb-1 gap-x-3 lg:gap-x-8 justify-end">
+            <div className="flex mb-1 col-span-2 lg:col-span-1 overflow-x-auto gap-x-3 lg:gap-x-8 justify-end">
                 <div className="px-2 flex items-center gap-x-1 h-8 bg-white rounded-md shadow">
                     <p className="fs-200 text-gray-400">Requested</p>
                     <p className="fs-400 fw-600"> 1,200</p>

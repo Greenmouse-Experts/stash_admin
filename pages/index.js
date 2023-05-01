@@ -1,24 +1,72 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React from "react";
 import { AiOutlineMail } from "react-icons/ai";
 import { MdLockOutline } from "react-icons/md";
-import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+import { Button } from "@/components/UI/button";
+import { InputType, TextInput } from "@/components/UI/textInput";
+import { Controller, useForm } from "react-hook-form";
+import { useLazyLoginQuery } from "@/services/api/authSlice";
+import { saveUser } from "@/redux/reducers/userSlice";
+import { toast } from "react-toastify";
+import { encryptPayload } from "@/services/helpers";
+import { useDispatch } from "react-redux";
+import { useRouter } from "next/router";
+import getCallBackRoute from "@/hooks/getCallBackRoute";
 
 const Login = () => {
-  const [passwordType, setPasswordType] = useState("password");
-  const togglePassword = () => {
-    if (passwordType === "password") {
-      setPasswordType("text");
-      return;
-    }
-    setPasswordType("password");
+
+  const dispatch = useDispatch()
+  const router = useRouter()
+  const {
+    control,
+    handleSubmit,
+    setError,
+    formState: { errors, isValid },
+  } = useForm({
+    mode: "onChange",
+    defaultValues: {
+      user: "",
+      password: "",
+    },
+  });
+  const [login] = useLazyLoginQuery();
+
+  const onSubmit = async (data) => {
+    let payload = encryptPayload(data)
+    await login(payload)
+      .then((res) => {
+        if (res.isSuccess
+          ) {
+          dispatch(
+            saveUser({
+              userId: res.data.data.profile.user_id,
+              email: res.data.data.profile.email,
+              lastName: res.data.data.profile.last_name,
+              firstName: res.data.data.profile.first_name,
+              token: res.data.data.token,
+              refreshToken: res.data.data.refreshToken,
+              phone_number: res.data.data.phone_number,
+            })
+          );
+          toast.success(res.data.msg);
+          router.push(getCallBackRoute(router.asPath));
+        }
+
+        if (res.isError) {
+          toast.error(res.error.data.msg);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("Login Failed");
+      });
   };
 
   return (
     <div>
-      <div className="lg:bg-secondary min-h-screen font-primary">
+      <div className="bg-secondary min-h-screen font-primary">
         <div className="flex lg:pt-16 text-sm h-screen items-center justify-center">
           <div className="lg:w-4/12 rounded shadow bg-white w-11/12 p-6 pb-8">
             <Link href="/">
@@ -34,45 +82,59 @@ const Login = () => {
               <p className="fw-500 text-center lg:text-xl mb-12">
                 Login to your account{" "}
               </p>
-              <form>
+              <form onSubmit={handleSubmit(onSubmit)} className="fs-700">
                 <div>
-                  <div className="bg-input p-2 flex items-center rounded fs-600">
-                    <AiOutlineMail className="text-xl lg:text-3xl mx-2 text-input mt-1" />
-                    <input
-                      type="text"
-                      placeholder="Email"
-                      className="p-1 w-full focus:bg-input bg-input placeholder-gray-400 outline-none"
-                    />
-                  </div>
+                  <Controller
+                    name="user"
+                    control={control}
+                    rules={{
+                      required: {
+                        value: true,
+                        message: "Please enter your email",
+                      },
+                    }}
+                    render={({ field }) => (
+                      <TextInput
+                        placeholder="Email"
+                        icon={
+                          <AiOutlineMail className="text-2xl text-gray-600" />
+                        }
+                        error={errors.user?.message}
+                        type={InputType.email}
+                        {...field}
+                      />
+                    )}
+                  />
                 </div>
                 <div className="mt-6">
-                  <div className="bg-input p-2 flex items-center rounded fs-600">
-                    <MdLockOutline className="text-xl lg:text-3xl mx-2 text-input " />
-                    <input
-                      type={passwordType}
-                      placeholder="Password"
-                      className="p-1 w-full focus:bg-input bg-input placeholder-gray-400 outline-none"
-                    />
-                    <div onClick={togglePassword} className="px-3">
-                      {passwordType === "password" ? (
-                        <FaRegEyeSlash className="text-xl text-input" />
-                      ) : (
-                        <FaRegEye className="text-xl text-input" />
-                      )}
-                    </div>
-                  </div>
-                  <p className="mt-4 text-end">
-                    <Link href="/auth/forget" className="fw-500 ">
-                      Forgot password?
-                    </Link>
-                  </p>
+                  <Controller
+                    name="password"
+                    control={control}
+                    rules={{
+                      required: {
+                        value: true,
+                        message: "Password is required",
+                      },
+                      minLength: {
+                        value: 5,
+                        message: "Password is too short",
+                      },
+                    }}
+                    render={({ field }) => (
+                      <TextInput
+                        placeholder="Password"
+                        icon={
+                          <MdLockOutline className="text-xl lg:text-2xl text-input " />
+                        }
+                        error={errors.password?.message}
+                        type={InputType.password}
+                        {...field}
+                      />
+                    )}
+                  />
                 </div>
                 <div className="mt-12">
-                <Link href='dashboard'>
-                  <button className="py-3 lg:text-lg w-full btn-primary">
-                    Login
-                  </button>
-                  </Link>
+                  <Button title="Login" disabled={!isValid} />
                 </div>
               </form>
             </div>

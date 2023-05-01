@@ -9,8 +9,13 @@ import { FaRegUser } from "react-icons/fa";
 import { FiLifeBuoy } from "react-icons/fi";
 import { TfiShiftLeft } from "react-icons/tfi";
 import { RiBriefcaseLine } from "react-icons/ri";
+import useModal from "@/hooks/useModal";
+import { LogoutModal } from "../auth/LogoutModal";
 
 export default function SidebarLayout() {
+
+  const {Modal, setShowModal} = useModal()
+
   return (
     <div className="left-0 fixed index-30 h-screen bg-secondary">
       <Sidebar
@@ -62,18 +67,19 @@ export default function SidebarLayout() {
           >
             Spend
           </MenuItem>
-          <MenuItem component={<Link href="/loans" />} 
-            icon={<img
-              src="https://res.cloudinary.com/greenmouse-tech/image/upload/v1681819742/Stash/Borrow_icon_wjpmd3.png"
-              alt="pos"
-              className="w-5"
-            />}>
+          <MenuItem
+            component={<Link href="/loans" />}
+            icon={
+              <img
+                src="https://res.cloudinary.com/greenmouse-tech/image/upload/v1681819742/Stash/Borrow_icon_wjpmd3.png"
+                alt="pos"
+                className="w-5"
+              />
+            }
+          >
             Loans
           </MenuItem>
-          <MenuItem
-            component={<Link href="/customers" />}
-            icon={<FaRegUser />}
-          >
+          <MenuItem component={<Link href="/customers" />} icon={<FaRegUser />}>
             Customers
           </MenuItem>
           <MenuItem
@@ -128,19 +134,20 @@ export default function SidebarLayout() {
             <MenuItem component={<Link href="/settings/customers" />}>
               Manage Clients
             </MenuItem>
-            <MenuItem component={<Link href="/settings/logs" />}>
-              Logs
-            </MenuItem>
+            <MenuItem component={<Link href="/settings/logs" />}>Logs</MenuItem>
           </SubMenu>
           <MenuItem
             className="mt-12"
-            component={<Link href="/" />}
             icon={<TfiShiftLeft />}
+            onClick={()=> setShowModal(true)}
           >
             Logout
           </MenuItem>
         </Menu>
       </Sidebar>
+      <Modal title="" noHead>
+          <LogoutModal CloseModal={() => setShowModal(false)}/>
+      </Modal>
     </div>
   );
 }
