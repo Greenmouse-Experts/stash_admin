@@ -10,6 +10,7 @@ import {
 import useModal from "@/hooks/useModal";
 import ReusableModal from "@/components/helpers/ReusableModal";
 import { toast } from "react-toastify";
+import ReviewModal from "../modals/ReviewModal";
 
 const LoanInsuranceTable = () => {
   const { Modal, setShowModal } = useModal();
@@ -146,7 +147,7 @@ const LoanInsuranceTable = () => {
                     Accept
                   </MenuItem>
                   <MenuItem onClick={() => declineOption("user loan has been declined")}>Decline</MenuItem>
-                  <MenuItem>Review</MenuItem>
+                  <MenuItem onClick={() => setShowModal(true)}>Review</MenuItem>
                 </MenuList>
               </Menu>
             </td>
@@ -558,6 +559,9 @@ const LoanInsuranceTable = () => {
           </tr>
         </tbody>
       </table>
+      <Modal title="Review Loan">
+        <ReviewModal/>
+      </Modal>
       <AcceptModal title="" noHead>
         <ReusableModal
           title="Are you sure you want to accept this request?"

@@ -8,7 +8,7 @@ import { persistor, store } from "@/redux/store";
 export default function App({ Component, pageProps }) {
   return (
     <Provider store={store}>
-      <PersistGate loading={"LOADING"} persistor={persistor}>
+      <PersistGate persistor={persistor}>
         <ToastContainer
           position="top-right"
           autoClose={3000}
