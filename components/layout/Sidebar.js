@@ -13,8 +13,7 @@ import useModal from "@/hooks/useModal";
 import { LogoutModal } from "../auth/LogoutModal";
 
 export default function SidebarLayout() {
-
-  const {Modal, setShowModal} = useModal()
+  const { Modal, setShowModal } = useModal();
 
   return (
     <div className="left-0 fixed index-30 h-screen bg-secondary">
@@ -70,9 +69,11 @@ export default function SidebarLayout() {
           <MenuItem
             component={<Link href="/loans" />}
             icon={
-              <img
+              <Image
                 src="https://res.cloudinary.com/greenmouse-tech/image/upload/v1681819742/Stash/Borrow_icon_wjpmd3.png"
                 alt="pos"
+                width={80}
+                height={80}
                 className="w-5"
               />
             }
@@ -85,9 +86,11 @@ export default function SidebarLayout() {
           <MenuItem
             component={<Link href="/pos" />}
             icon={
-              <img
+              <Image
                 src="https://res.cloudinary.com/greenmouse-tech/image/upload/v1681819742/Stash/pos-machine-2_2_1_ddcvsu.png"
                 alt="pos"
+                width={80}
+                height={80}
                 className="w-45"
               />
             }
@@ -139,14 +142,14 @@ export default function SidebarLayout() {
           <MenuItem
             className="mt-12"
             icon={<TfiShiftLeft />}
-            onClick={()=> setShowModal(true)}
+            onClick={() => setShowModal(true)}
           >
             Logout
           </MenuItem>
         </Menu>
       </Sidebar>
       <Modal title="" noHead>
-          <LogoutModal CloseModal={() => setShowModal(false)}/>
+        <LogoutModal CloseModal={() => setShowModal(false)} />
       </Modal>
     </div>
   );

@@ -33,7 +33,7 @@ const NotifyList = () => {
   return (
     <>
       {list.map((item) => (
-        <MenuItem>
+        <MenuItem key={item.id}>
           <div className="flex gap-x-4">
             <Image
               src={item.image}
