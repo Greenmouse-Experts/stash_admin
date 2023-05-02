@@ -39,6 +39,7 @@ export const TextInput = ({
   max,
   customRightElement,
   altClassName,
+  divClassName,
   icon,
   ...rest
 }) => {
@@ -115,7 +116,7 @@ export const TextInput = ({
         </>
       </div>
       <div
-        className={classNames(
+        className={divClassName || classNames(
           error ? "border-red-400" : "border-0 ",
           "flex items-center bg-input border mt-1 py-1 rounded"
         )}

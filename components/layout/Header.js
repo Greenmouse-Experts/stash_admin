@@ -17,6 +17,7 @@ import {
 import useModal from "@/hooks/useModal";
 import { LogoutModal } from "../auth/LogoutModal";
 import { useSelector } from "react-redux";
+import NotifyList from "../notification/NotifyList";
 
 const Header = () => {
   const { Modal, setShowModal } = useModal();
@@ -40,8 +41,24 @@ const Header = () => {
         </div>
         <div className="flex items-center">
           <div className="relative">
-            <BsBell className="text-2xl" />
-            <p className="w-3 h-3 circle bg-red-600 absolute -top-1 right-0"></p>
+            {/* <BsBell className="text-2xl" /> */}
+            <p className="w-4 h-4 circle bg-red-600 absolute top-2 index-20 -right-1 grid place-content-center text-xs fw-600 text-white">3</p>
+            <Menu placement="bottom-end">
+                <MenuHandler>
+                  <Button className="bg-transparent px-0 mx-0 hover:shadow-none text-md flex items-center font-normal shadow-none text-black capitalize">
+                  <BsBell className="text-2xl" />
+                  </Button>
+                </MenuHandler>
+                <MenuList className="!index-30 lg:w-72 p-0 rounded-none">
+                  <div className="bg-primary mb-3 text-white p-3 py-2">
+                    <p className="fs-500">Notifications</p>
+                  </div>
+                  <NotifyList/>
+                  <MenuItem className="border-t">
+                    <Link href='/' className="w-full block text-primary fw-500 text-center">See all recent activity</Link>
+                  </MenuItem>
+                </MenuList>
+              </Menu>
           </div>
           <div className="lg:ml-12 ml-5 flex items-center">
             <Link href="/profile">
@@ -61,7 +78,7 @@ const Header = () => {
                 </MenuHandler>
                 <MenuList className="!index-30 w-36">
                   <MenuItem><Link href='/profile'>Profile</Link></MenuItem>
-                  <MenuItem>Logout</MenuItem>
+                  <MenuItem onClick={() => setShowModal(true)}>Logout</MenuItem>
                 </MenuList>
               </Menu>
             </div>
