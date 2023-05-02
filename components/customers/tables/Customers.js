@@ -1,3 +1,4 @@
+import { EmptyState1 } from '@/components/UI/emptyStates'
 import Link from 'next/link'
 import React from 'react'
 

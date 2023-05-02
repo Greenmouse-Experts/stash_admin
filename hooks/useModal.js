@@ -16,7 +16,7 @@ const useModal = () => {
             onClick={() => setShowModal(false)}
           >
             <div
-              className="w-11/12 md:w-8/12 lg:w-5/12 xl:w-4/12  p-4 lg:px-8 rounded shade bg-white"
+              className={`w-11/12  p-4 lg:px-8 rounded shade bg-white ${noHead? 'md:w-6/12 lg:w-96' : 'md:w-8/12 lg:w-5/12 xl:w-4/12 '}`}
               onClick={(e) => e.stopPropagation()}
             >
               {!noHead && (
@@ -39,7 +39,7 @@ const useModal = () => {
                   <Loading />
                 </div>
               )}
-              <div className="py-6">{children}</div>
+              <div className={noHead? "py-6 text-center" : "py-6"}>{children}</div>
             </div>
           </div>
         )}

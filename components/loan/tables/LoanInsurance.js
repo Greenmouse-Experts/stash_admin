@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import {
   Menu,
@@ -7,8 +7,33 @@ import {
   MenuList,
   Button,
 } from "../../UI/dropdown";
+import useModal from "@/hooks/useModal";
+import ReusableModal from "@/components/helpers/ReusableModal";
+import { toast } from "react-toastify";
 
 const LoanInsuranceTable = () => {
+  const { Modal, setShowModal } = useModal();
+  const { Modal: DeclineModal, setShowModal: setShowDeclineModal } = useModal();
+  const { Modal:AcceptModal, setShowModal: setShowAcceptModal } = useModal();
+  const [val, setVal] = useState();
+
+  const acceptOption = (value) => {
+    setShowAcceptModal(true);
+    setVal(value);
+  };
+  const declineOption = (value) => {
+    setShowDeclineModal(true);
+    setVal(value);
+  };
+  const acceptLoan = (value) => {
+    toast.success(value);
+    setShowAcceptModal(false);
+  };
+  const declineLoan = (value) => {
+    toast.success(value);
+    setShowDeclineModal(false);
+  };
+
   return (
     <div className="overflow-x-scroll mt-8">
       <table className="min-w-full text-left">
@@ -115,8 +140,12 @@ const LoanInsuranceTable = () => {
                   </Button>
                 </MenuHandler>
                 <MenuList>
-                  <MenuItem>Accept</MenuItem>
-                  <MenuItem>Decline</MenuItem>
+                  <MenuItem
+                    onClick={() => acceptOption("user loan has been accepted")}
+                  >
+                    Accept
+                  </MenuItem>
+                  <MenuItem onClick={() => declineOption("user loan has been declined")}>Decline</MenuItem>
                   <MenuItem>Review</MenuItem>
                 </MenuList>
               </Menu>
@@ -142,8 +171,8 @@ const LoanInsuranceTable = () => {
               <p className="text-primary underline fw-600">View</p>
             </td>
             <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              <p className="px-3 py-1 rounded bg-green-50 text-green-600 border border-green-500">
-                Approved
+              <p className="w-24 fs-500 rounded fw-500 text-center border border-yellow-800 text-yellow-800 py-1">
+                Pending
               </p>
             </td>
             <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
@@ -529,6 +558,24 @@ const LoanInsuranceTable = () => {
           </tr>
         </tbody>
       </table>
+      <AcceptModal title="" noHead>
+        <ReusableModal
+          title="Are you sure you want to accept this request?"
+          cancelTitle="No, cancel"
+          actionTitle="Yes, accept"
+          closeModal={() => setShowAcceptModal(false)}
+          action={() => acceptLoan(val)}
+        />
+      </AcceptModal>
+      <DeclineModal title="" noHead>
+        <ReusableModal
+          title="Are you sure you want to decline this request?"
+          cancelTitle="No, cancel"
+          actionTitle="Yes, decline"
+          closeModal={() => setShowDeclineModal(false)}
+          action={() => declineLoan(val)}
+        />
+      </DeclineModal>
     </div>
   );
 };

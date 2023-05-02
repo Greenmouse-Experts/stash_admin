@@ -1,4 +1,3 @@
-import React from "react";
 
 const getCallBackRoute = (path) => {
   if (path === "/") return "/dashboard";
