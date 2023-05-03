@@ -13,17 +13,19 @@ import { setupListeners } from '@reduxjs/toolkit/query'
 import storage from "redux-persist/lib/storage";
 import { RESET_STATE_ACTION_TYPE } from "./actions/resetState";
 import { apiSlice } from "@/services/apiSlice";
-import userReducer from "./reducers/userSlice"
+import authReducer from "./reducers/authSlice"
+import userReducer from "./reducers/userSlice";
 
 const reducers = {
     [apiSlice.reducerPath]: apiSlice.reducer,
+    auth: authReducer,
     user: userReducer,
   };
 
   const persistConfig = {
     key: "root",
     storage: storage,
-    whitelist: ["user"],
+    whitelist: ['auth'],
   };
 
   const combinedReducer = combineReducers(reducers);

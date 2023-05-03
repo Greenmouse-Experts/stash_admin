@@ -8,7 +8,7 @@ import { Button } from "@/components/UI/button";
 import { InputType, TextInput } from "@/components/UI/textInput";
 import { Controller, useForm } from "react-hook-form";
 import { useLazyLoginQuery } from "@/services/api/authSlice";
-import { saveUser } from "@/redux/reducers/userSlice";
+import { saveAuth} from "@/redux/reducers/authSlice";
 import { toast } from "react-toastify";
 import { encryptPayload } from "@/services/helpers";
 import { useDispatch } from "react-redux";
@@ -42,7 +42,7 @@ const Login = () => {
       .then((res) => {
         if (res.isSuccess) {
           dispatch(
-            saveUser({
+            saveAuth({
               userId: res.data.data.profile.user_id,
               email: res.data.data.profile.email,
               lastName: res.data.data.profile.last_name,
@@ -50,6 +50,7 @@ const Login = () => {
               token: res.data.data.token,
               refreshToken: res.data.data.refreshToken,
               phone_number: res.data.data.phone_number,
+              photo: res.data.data.profile.image,
             })
           );
           toast.success(res.data.msg);

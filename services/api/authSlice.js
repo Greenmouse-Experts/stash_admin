@@ -2,7 +2,7 @@
 
 import { apiSlice } from "../apiSlice";
 import * as ENDPOINT from "../constants";
-import { requestAuthorization, requestLocation } from "../helpers";
+import { requestAuthorization } from "../helpers";
 
 export const authApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -11,8 +11,8 @@ export const authApiSlice = apiSlice.injectEndpoints({
         url: `${ENDPOINT.LOGIN}`,
         method: ENDPOINT.HTTP_METHODS.POST,
         body: {
-          message: payload
-        }
+          message: payload,
+        },
       }),
       keepUnusedDataFor: ENDPOINT.CACHE_LIFETIME.DEFAULT,
     }),
@@ -26,8 +26,39 @@ export const authApiSlice = apiSlice.injectEndpoints({
       }),
       keepUnusedDataFor: ENDPOINT.CACHE_LIFETIME.DEFAULT,
     }),
+    editProfile: builder.query({
+      query: (payload) => ({
+        url: `${ENDPOINT.EDIT_PROFILE}`,
+        method: ENDPOINT.HTTP_METHODS.POST,
+        headers: {
+          Authorization: requestAuthorization(),
+        },
+        body: {
+          message: payload,
+        },
+      }),
+      keepUnusedDataFor: ENDPOINT.CACHE_LIFETIME.DEFAULT,
+    }),
+    updateAdminPassword: builder.query({
+      query: (payload) => ({
+        url: `${ENDPOINT.CHANGE_PASSWORD}`,
+        method: ENDPOINT.HTTP_METHODS.POST,
+        headers: {
+          Authorization: requestAuthorization(),
+        },
+        body: {
+          message: payload,
+        },
+      }),
+    }),
     overrideExisting: false,
   }),
 });
 
-export const {useLazyLoginQuery, useGetProfileQuery} = authApiSlice;
+export const {
+  useLazyLoginQuery,
+  useLazyEditProfileQuery,
+  useGetProfileQuery,
+  useUpdateAdminPasswordMutation,
+  useLazyUpdateAdminPasswordQuery
+} = authApiSlice;

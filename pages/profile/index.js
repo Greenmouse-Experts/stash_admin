@@ -3,35 +3,110 @@ import Image from "next/image";
 import Layout from "@/components/layout/Layout";
 import { InputType, TextInput } from "@/components/UI/textInput";
 import { Button } from "@/components/UI/button";
-import { useGetProfileQuery } from "@/services/api/authSlice";
 import { Controller, useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
+import { encryptPayload } from "@/services/helpers";
+import {
+  useEditProfileMutation,
+  useGetProfileQuery,
+  useLazyEditProfileQuery,
+} from "@/services/api/authSlice";
+import "react-phone-number-input/style.css";
+import PhoneInputWithCountry from "react-phone-number-input/react-hook-form";
+import { toast } from "react-toastify";
+import { HashSpinner } from "@/components/UI/spinners";
+import { useLazyUploadImageQuery } from "@/services/api/routineSlice";
+import ChangePassword from "@/components/profile/ChangePassword";
 
 const ProfilePage = () => {
   const [profileImage, setProfileImage] = useState();
   const [preview, setPreview] = useState();
+  const user = useSelector((state) => state.auth.auth);
+
+  const [upload] = useLazyUploadImageQuery();
   const { isLoading, isSuccess, data } = useGetProfileQuery();
 
-  const changeProfileImage = (e) => {
+  const changeProfileImage = async (e) => {
     e.preventDefault();
     setProfileImage(e.target.files[0]);
     const objectUrl = URL.createObjectURL(e.target.files[0]);
     setPreview(objectUrl);
+    const formData = new FormData();
+    formData.append("image", e.target.files[0]);
+    await upload(formData)
+      .then((res) => {
+        if (res.isSuccess) {
+          editProfile({
+            photo: res.data.data.profile.user_id,
+          });
+          toast.success(res.data.msg);
+          setIsBusy(false);
+        }
+
+        if (res.isError) {
+          toast.error(res.error.data.msg);
+          setIsBusy(false);
+        }
+      })
+      .catch((err) => {
+        toast.error("Ecountered error");
+        setIsBusy(false);
+      });
   };
 
+  const [editProfile] = useLazyEditProfileQuery();
+
   const [isBusy, setIsBusy] = useState(false);
+
+
   const {
     control,
     handleSubmit,
     setError,
+    reset,
     formState: { errors },
   } = useForm({
+    mode: "onChange",
     defaultValues: {
-      first_name: data?.data.first_name || "",
-      last_name: data?.data.last_name || "",
-      phone: data?.data.phone || "",
-      email: data?.data.email || "",
+      first_name: user.firstName || "",
+      last_name: user.lastName || "",
+      phone_number: user.phone_number || "",
+      email: user.email || "",
     },
   });
+
+  useEffect(() => {
+    if (data) {
+      let defaults = {
+        first_name: data.data.first_name,
+        last_name: data.data.last_name,
+        phone_number: data.data.phone,
+        email: data.data.email
+      };
+      reset(defaults);
+    }
+  }, [data]);
+
+  const onSubmit = async (data) => {
+    setIsBusy(true);
+    let payload = encryptPayload(data);
+    await editProfile(payload)
+      .then((res) => {
+        if (res.isSuccess) {
+          toast.success(res.data.msg);
+          setIsBusy(false);
+        }
+
+        if (res.isError) {
+          toast.error(res.error.data.msg);
+          setIsBusy(false);
+        }
+      })
+      .catch((err) => {
+        toast.error(err?.data?.msg);
+        setIsBusy(false);
+      });
+  };
 
   return (
     <Layout>
@@ -43,8 +118,8 @@ const ProfilePage = () => {
               src={
                 preview
                   ? preview
-                  : data?.data?.image
-                  ? data?.data?.image
+                  : user?.photo
+                  ? user?.photo
                   : "https://res.cloudinary.com/greenmouse-tech/image/upload/v1680190106/Stash/PHOTO-2022-10-21-09-00-15_1_sy91nw.png"
               }
               alt="profile"
@@ -62,7 +137,7 @@ const ProfilePage = () => {
               />
             </p>
           </div>
-          <form className="border-b pb-12">
+          <form onSubmit={handleSubmit(onSubmit)} className="border-b pb-12">
             <div className="mt-8  grid lg:grid-cols-3 gap-y-8 gap-x-16">
               <div>
                 <p className="fw-600 text-xl">Edit Name</p>
@@ -92,21 +167,23 @@ const ProfilePage = () => {
                 </div>
                 <div className="mt-4 lg:mt-8">
                   <Controller
-                    name="last_name"
+                    name="email"
                     control={control}
                     rules={{
                       required: {
                         value: true,
-                        message: "Please enter your email",
+                        message: "Please input a value",
                       },
                     }}
                     render={({ field }) => (
                       <TextInput
                         type={InputType.email}
                         label="Email"
+                        disabled
                         labelClassName="fw-500 lg:fs-700 text-gray-500"
                         altClassName="bg-white w-full p-2 outline-none lg:p-3 rounded"
                         divClassName="bg-white border border-gray-400 mt-2 rounded"
+                        {...field}
                       />
                     )}
                   />
@@ -114,71 +191,59 @@ const ProfilePage = () => {
               </div>
               <div>
                 <div>
-                  <TextInput
-                    type={InputType.text}
-                    label="Last Name"
-                    labelClassName="fw-500 lg:fs-700 text-gray-500"
-                    altClassName="bg-white w-full p-2 lg:p-3 outline-none rounded"
-                    divClassName="bg-white border border-gray-400 mt-2 rounded"
+                  <Controller
+                    name="last_name"
+                    control={control}
+                    rules={{
+                      required: {
+                        value: true,
+                        message: "Please input a value",
+                      },
+                    }}
+                    render={({ field }) => (
+                      <TextInput
+                        type={InputType.text}
+                        label="Last Name"
+                        labelClassName="fw-500 lg:fs-700 text-gray-500"
+                        altClassName="bg-white w-full p-2 outline-none lg:p-3 rounded"
+                        divClassName="bg-white border border-gray-400 mt-2 rounded"
+                        {...field}
+                      />
+                    )}
                   />
                 </div>
                 <div className="mt-4 lg:mt-8">
-                  <TextInput
-                    type={InputType.number}
-                    label="Phone Number"
-                    labelClassName="fw-500 lg:fs-700 text-gray-500"
-                    altClassName="bg-white w-full p-2 outline-none lg:p-3 rounded"
-                    divClassName="bg-white border border-gray-400 mt-2 rounded"
+                  <label className="mb-2 block text-gray-500">Phone Number</label>
+                  <PhoneInputWithCountry
+                    international
+                    defaultCountry="NG"
+                    name="phone_number"
+                    disabled
+                    control={control}
+                    defaultValue={data?.data.phone_number}
+                    rules={{ required: true }}
+                    className="border lg:p-3 p-2 border-gray-400 rounded outline-none"
                   />
+                  {errors.phone_number && (
+                    <p className="error text-red-500 fw-500">
+                      Invalid Phone Number
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
             <div className="text-end mt-8">
               <Button
-                title="Edit"
                 altClassname="py-2 lg:px-10 px-6 btn-primary"
+                title={
+                  isBusy ? <HashSpinner size={25} color="white" /> : "Edit"
+                }
               />
             </div>
           </form>
-          <form>
-            <div className="py-8  grid lg:grid-cols-3 gap-x-16">
-              <div>
-                <p className="fw-600 text-xl">Change Password</p>
-              </div>
-              <div className="mt-8 lg:mt-0">
-                <div>
-                  <label className="fw-500 lg:fs-700 text-gray-500">
-                    Old password
-                  </label>
-                  <input
-                    type="password"
-                    className="p-3 rounded border mt-2 border-gray-400 w-full"
-                  />
-                </div>
-                <div className="mt-8">
-                  <label className="fw-500 lg:fs-70 text-gray-500">
-                    New password
-                  </label>
-                  <input
-                    type="password"
-                    className="p-3 rounded border mt-2 border-gray-400 w-full"
-                  />
-                </div>
-              </div>
-              <div className="self-end mt-8 lg:mt-0">
-                <label className="fw-500 lg:fs-700 text-gray-500">
-                  Confirm password
-                </label>
-                <input
-                  type="text"
-                  className="p-3 rounded border mt-2 border-gray-400 w-full"
-                />
-              </div>
-            </div>
-            <div className="text-end">
-              <button className="btn-primary px-7 py-2">Edit</button>
-            </div>
-          </form>
+          <div>
+            <ChangePassword/>
+          </div>
         </div>
       </div>
     </Layout>

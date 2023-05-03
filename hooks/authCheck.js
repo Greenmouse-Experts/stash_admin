@@ -1,18 +1,18 @@
 "use client";
 
 
-import { selectUser, resetUser } from "@/redux/reducers/userSlice";
+import { selectAuth, resetUser } from "@/redux/reducers/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const useAuthCheck = () => {
   const dispatch = useDispatch();
-  const authenticatedUser = useSelector(selectUser);
+  const authenticatedUser = useSelector(selectAuth);
 
-  const AuthenticatedUserHaveValidToken = authenticatedUser.user.token || null;
+  const AuthenticatedUserHaveValidToken = authenticatedUser.auth.token || null;
 
-  const IsAuthenticated = !!authenticatedUser.user.token;
+  const IsAuthenticated = !!authenticatedUser.auth.token;
 
-  const LoggedInUser = authenticatedUser.user;
+  const LoggedInUser = authenticatedUser.auth;
 
   const SignOut = () => dispatch(resetUser());
 

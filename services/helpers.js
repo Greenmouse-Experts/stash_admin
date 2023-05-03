@@ -4,13 +4,13 @@ let CryptoJS = require("crypto-js");
 
 
 export const requestAuthorization = () =>
-  `Bearer ${store.getState().user.user.token || ""}`;
+  `Bearer ${store.getState().auth.auth.token || ""}`;
 
-export const requestToken = () => store.getState().user.user.token || "";
+export const requestToken = () => store.getState().auth.auth.token || "";
 
-export const refreshToken = () => store.getState().user.user.refreshToken || "";
+export const refreshToken = () => store.getState().auth.auth.refreshToken || "";
 
-export const requestUserId = () => store.getState().user.user.userId || "x";
+export const requestauthId = () => store.getState().auth.auth.userId || "x";
 
 export const encryptPayload = (value) => {
   const payload = JSON.stringify(value)

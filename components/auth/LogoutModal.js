@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button } from '../UI/button'
-import { resetUser } from '@/redux/reducers/userSlice'
+import { resetAuth } from '@/redux/reducers/authSlice'
 import { useDispatch } from 'react-redux'
 import { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
@@ -9,7 +9,7 @@ export const LogoutModal = ({CloseModal}) => {
     const dispatch = useDispatch();
     const router = useRouter()
     const logoutAdmin = () => {
-        dispatch(resetUser())
+        dispatch(resetAuth())
         toast.success("Logout Successful")
         router.push('/')
     }

@@ -89,6 +89,9 @@ input:focus-within {
 .Toastify__toast-theme--colored.Toastify__toast--success {
   background-color: linear-gradient(90deg, #6B5AED 0%, #8D7EFF 100%)  !important;
 }
+.PhoneInputInput {
+  outline: none !important;
+}
 @layer components {
   .box {
     width: 100%;

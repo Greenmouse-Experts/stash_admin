@@ -3,8 +3,8 @@ import { useSelector } from 'react-redux'
 
 const ProfileAvatar = () => {
 
-    const firstName = useSelector((state) => state.user.user.firstName)
-    const lastName = useSelector((state) => state.user.user.lastName)
+    const firstName = useSelector((state) => state.auth.auth.firstName)
+    const lastName = useSelector((state) => state.auth.auth.lastName)
     const first = firstName.charAt(0)
     const last = lastName.charAt(0)
   return (
