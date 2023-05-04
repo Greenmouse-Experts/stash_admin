@@ -32,11 +32,6 @@ const CustomerPage = () => {
             </div>
         </div>
         <div className="mt-12 w-full p-8 bg-white shade rounded-md">
-          <div className="flex items-center justify-end">
-            <p className="flex items-center border border-gray-400 px-3 ml-10 rounded-md fw-500">
-              Filter <BsFilter className="ml-1" />
-            </p>
-          </div>
           <div>
             <CustomersTable />
           </div>

@@ -22,21 +22,19 @@ export const routineApiSlice = apiSlice.injectEndpoints({
       keepUnusedDataFor: ENDPOINT.CACHE_LIFETIME.EXTENDED,
     }),
 
-    getUserProfile: builder.query({
-      query: () => ({
-        url: `${ENDPOINT.GET_PROFILE}`,
-        headers: {
-          Authorization: requestAuthorization(),
-        },
-        method: ENDPOINT.HTTP_METHODS.POST,
-        body: {
-          user_id: requestUserId(),
-        },
+    getCustomers: builder.query({
+        query: () => ({
+          url: `${ENDPOINT.GET_ALL_CUSTOMERS}`,
+          headers: {
+            Authorization: requestAuthorization(),
+          },
+          method: ENDPOINT.HTTP_METHODS.GET,
+          
+        }),
+        keepUnusedDataFor: ENDPOINT.CACHE_LIFETIME.DEFAULT,
       }),
-      keepUnusedDataFor: ENDPOINT.CACHE_LIFETIME.DEFAULT,
-    }),
   }),
   overrideExisting: true,
 });
 
-export const { useLazyUploadImageQuery } = routineApiSlice;
+export const { useLazyUploadImageQuery, useGetCustomersQuery, useLazyGetCustomersQuery } = routineApiSlice;

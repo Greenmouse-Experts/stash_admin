@@ -36,9 +36,8 @@ const ProfilePage = () => {
     await upload(formData)
       .then((res) => {
         if (res.isSuccess) {
-          editProfile({
-            photo: res.data.data.profile.user_id,
-          });
+          const payload = encryptPayload({photo: res.data[0]})
+          editProfile(payload);
           toast.success(res.data.msg);
           setIsBusy(false);
         }

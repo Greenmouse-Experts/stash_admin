@@ -1,11 +1,115 @@
-import { EmptyState1 } from '@/components/UI/emptyStates'
-import Link from 'next/link'
-import React from 'react'
+import Table from "@/components/UI/table";
+import {
+  useGetCustomersQuery,
+  useLazyGetCustomersQuery,
+} from "@/services/api/routineSlice";
+import React, { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
+import { FormatStatus, formatDate } from "@/components/formats/formatItem";
+import { EmptyState1 } from "@/components/UI/emptyStates";
+import { DateRangePicker } from "react-date-range";
+import "react-date-range/dist/styles.css"; // main style file
+import "react-date-range/dist/theme/default.css"; // theme css file
+import { BsCalendarRangeFill } from "react-icons/bs";
 
 const CustomersTable = () => {
+  const [getCustomer] = useLazyGetCustomersQuery();
+  const [selectedCustomers, setSelectedCustomers] = useState([]);
+  const [customer, setCustomer] = useState([]);
+  const [isBusy, setIsBusy] = useState(false);
+  const [datePicker, setDatePicker] = useState(false)
+
+  const GetCustomers = async () => {
+    setIsBusy(true);
+    const data = await getCustomer();
+    if (data.isSuccess) {
+      setCustomer(data.data.data);
+      setIsBusy(false);
+    }
+    setIsBusy(false);
+  };
+  useEffect(() => {
+    GetCustomers();
+  }, []);
+
+  const columns = useMemo(
+    () => [
+      {
+        Header: "S/N",
+        accessor: (row, index) => index + 1, //RDT provides index by default
+      },
+      {
+        Header: "Name",
+        accessor: "first_name",
+        Cell: (row) => (
+          <p className="cursor-pointer">
+            {row.value} {row?.row.original.last_name}
+          </p>
+        ),
+      },
+      {
+        Header: "Email",
+        accessor: "email",
+      },
+      {
+        Header: "Phone no",
+        accessor: "phone",
+      },
+      {
+        Header: "Levels",
+        accessor: "products[0].role.name",
+      },
+      {
+        Header: "Status",
+        accessor: "active",
+        Cell: (props) => (
+          <p>
+            {props.value ? FormatStatus["Active"] : FormatStatus["inactive"]}
+          </p>
+        ),
+      },
+      {
+        Header: "Date",
+        accessor: "createdAt",
+        Cell: (props) => formatDate(props.value),
+      },
+    ], // eslint-disable-next-line
+    []
+  );
+
+  const data = useMemo(() => customer, []);
+
+  // date range
+
+  const handleSelect = (date) => {
+    console.log(date);
+  };
+
+  const selectionRange = {
+    startDate: new Date(),
+    endDate: new Date(),
+    key: "selection",
+  };
+
+  const closeModal = () => {
+    setDatePicker(false)
+  }
   return (
-    <div className='overflow-x-auto mt-8'>
-        <table className="min-w-full text-left">
+    <div className="min-h-[100px] ">
+      {isBusy && <p>Loading</p>}
+      {customer && !isBusy && !customer.length && (
+        <EmptyState1 message="No data available" />
+      )}
+      {customer && !!customer.length && (
+        <div>
+          <div className="flex justify-end relative">
+            <div className="border border-2 items-center flex gap-x-2 fs-500 rounded px-3 py-2 bg-light" onClick={() => setDatePicker(!datePicker)}><BsCalendarRangeFill className="text-primary"/>Filter Date Range </div>
+            {datePicker && <div className="absolute top-12 border"><DateRangePicker showDateDisplay={false} ranges={[selectionRange]} onChange={handleSelect} /></div>}
+          </div>
+          <Table columns={columns} data={data} />
+        </div>
+      )}
+      {/* <table className="min-w-full text-left">
             <thead className="font-medium">
                 <tr>
                     <th scope="col" className="px-4 text-gray-400 align-middle py-3 whitespace-nowrap text-left">S/N</th>
@@ -91,9 +195,9 @@ const CustomersTable = () => {
                     <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">Mar 02, 23 - 9:22</td>
                 </tr>
             </tbody>
-        </table>
+        </table> */}
     </div>
-  )
-}
+  );
+};
 
-export default CustomersTable
+export default CustomersTable;

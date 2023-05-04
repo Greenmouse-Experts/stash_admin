@@ -1,3 +1,5 @@
+import dayjs from "dayjs"
+
 export const FormatStatus =  {
     "Pending": <p className="w-28 fs-500 rounded fw-500 text-center border border-yellow-800 bg-yellow-50 text-yellow-800 py-1">Pending</p>,
     "Approved" : <p className="w-28 fs-500 rounded fw-500 text-center border border-green-800 bg-green-50 text-green-800 py-1">Approved</p>,
@@ -17,4 +19,8 @@ export const FormatStatus =  {
     "Unwithdrawn": <p className="w-28 fs-500 rounded fw-500 text-center border border-red-800 bg-red-50 text-red-800 py-1">Unwithdrawn</p>,
     "Paid": <p className="w-28 fs-500 rounded fw-500 text-center border border-green-800 bg-green-50 text-green-800 py-1">Paid</p>,
     "Unpaid": <p className="w-28 fs-500 rounded fw-500 text-center border border-red-800 bg-red-50 text-red-800 py-1">Unpaid</p>,
+  }
+
+  export const formatDate = (value) => {
+    return dayjs(value).format("MMM DD, YY - HH:mm")
   }
