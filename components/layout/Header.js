@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { AiOutlineSearch } from "react-icons/ai";
@@ -12,10 +12,17 @@ import useModal from "@/hooks/useModal";
 import { LogoutModal } from "../auth/LogoutModal";
 import {  useSelector } from "react-redux";
 import NotifyList from "../notification/NotifyList";
+import { useGetProfileQuery } from "@/services/api/authSlice";
 
 const Header = () => {
   const { Modal, setShowModal } = useModal();
   const auth = useSelector((state) => state.auth.auth);
+  const { isLoading, isSuccess, data } = useGetProfileQuery();
+  const [image, setImage] = useState(auth.image)
+  
+  useEffect(() => {
+    setImage(data && data.data.image)
+  },[data])
 
   const { collapseSidebar, toggleSidebar, collapsed, toggled, broken, rtl } =
     useProSidebar();
@@ -66,11 +73,11 @@ const Header = () => {
             <Link href="/profile">
               {auth.photo ? (
                 <Image
-                  src={auth.photo}
+                  src={auth && image}
                   alt="logo"
                   width={300}
                   height={300}
-                  className="w-12 circle"
+                  className="w-12 h-12 circle"
                 />
               ) : (
                 <ProfileAvatar />

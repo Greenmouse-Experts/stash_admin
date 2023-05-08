@@ -1,5 +1,6 @@
 import React from 'react'
 import { FaAngleDoubleLeft, FaAngleDoubleRight, FaAngleLeft, FaAngleRight, FaSearch } from 'react-icons/fa';
+import 'regenerator-runtime/runtime'
 import { useTable, useGlobalFilter, useAsyncDebounce, useFilters, usePagination } from "react-table";
 
 function GlobalFilter({
@@ -7,23 +8,22 @@ function GlobalFilter({
     globalFilter,
     setGlobalFilter,
   }) {
-    // const count = preGlobalFilteredRows.length
+    const count =  preGlobalFilteredRows.length
     const [value, setValue] = React.useState(globalFilter)
-    // useAsyncDebounce
-    const onChange = (value => {
+    const onChange = useAsyncDebounce(value => {
       setGlobalFilter(value || undefined)
     }, 200)
   
     return (
-      <div>
+      <div className='border p-[6px] rounded border-gray-400'>
         <input
           value={value || ""}
           onChange={e => {
             setValue(e.target.value);
             onChange(e.target.value);
           }}
-        //   placeholder={`${count} records...`}
-          className=""
+          placeholder={`${count} records...`}
+          className="outline-none"
           icon={<FaSearch/>}
           label="Search Order"
         />
@@ -52,7 +52,7 @@ const Table = ({columns, data}) => {
 
     return (
         <>
-            <div className="lg:flex items-center mb-5 justify-between">
+            <div className="lg:flex items-center mb-5 relative z-10 w-6/12">
                 <GlobalFilter
                     preGlobalFilteredRows={preGlobalFilteredRows}
                     globalFilter={state.globalFilter}
@@ -160,7 +160,7 @@ export default Table
 // dropdown filter for table
 
 export function SelectColumnFilter({
-    column: { filterValue, setFilter, preFilteredRows, id },
+    column: { filterValue, setFilter, preFilteredRows, id }, name
   }) {
     // Calculate the options for filtering
     // using the preFilteredRows
@@ -182,9 +182,9 @@ export function SelectColumnFilter({
           setFilter(e.target.value || undefined);
         }}
         className="text-gray-700 outline-none font-light border border-gray-400 rounded-md p-2"
-        label='Filter by Status'
+        label='Filter by Level'
       >
-        <option value="">Filter by Status</option>
+        <option value="">Filter by Level</option>
         {options.map((option, i) => (
           <option key={i} value={option}>
             {option}

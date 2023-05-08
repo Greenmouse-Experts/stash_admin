@@ -23,6 +23,7 @@ export const CHANGE_PASSWORD = "/admin/password";
 
 // customers url
 export const GET_ALL_CUSTOMERS = "admin/customer/all"
+export const GET_CUSTOMER_DETAIL = "/admin/customer"
 
 
 

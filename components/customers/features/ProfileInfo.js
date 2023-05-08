@@ -1,7 +1,8 @@
+import dayjs from "dayjs";
 import Image from "next/image";
 import React from "react";
 
-const ProfileInfo = () => {
+const ProfileInfo = ({data}) => {
   return (
     <div>
       <div className="py-16 border-b lg:flex ">
@@ -18,7 +19,8 @@ const ProfileInfo = () => {
               <input
                 type="text"
                 className="p-3 rounded border mt-2 border-gray-400 w-full"
-                placeholder="Emmanuel"
+               value={data?.first_name}
+               disabled
               />
             </div>
             <div className="mt-8">
@@ -28,7 +30,8 @@ const ProfileInfo = () => {
               <input
                 type="text"
                 className="p-3 rounded border mt-2 border-gray-400 w-full"
-                placeholder="Emmanuel"
+                value={data?.middle_name}
+               disabled
               />
             </div>
             <div className="mt-8">
@@ -37,9 +40,10 @@ const ProfileInfo = () => {
                 <input
                   type="text"
                   className=" w-full"
-                  placeholder="0900000000"
+                  value={data?.phone}
+               disabled
                 />
-                <p className="fw-600 text-green-500">verified</p>
+                <p className="fw-600 text-green-500">{data.phone_verified? "verified" : "not verified"}</p>
               </div>
             </div>
             <div className="mt-8">
@@ -59,7 +63,8 @@ const ProfileInfo = () => {
               <input
                 type="text"
                 className="p-3 rounded border mt-2 border-gray-400 w-full"
-                value="Jonah"
+                value={data?.last_name}
+                disabled
               />
             </div>
             <div className="mt-8">
@@ -67,7 +72,8 @@ const ProfileInfo = () => {
               <input
                 type="email"
                 className="p-3 rounded border mt-2 border-gray-400 w-full"
-                value="greenmouse@gmail.com"
+                value={data?.email}
+                disabled
               />
             </div>
             <div className="mt-8">
@@ -75,9 +81,10 @@ const ProfileInfo = () => {
                 Date of Birth
               </label>
               <input
-                type="email"
+                type="text"
                 className="p-3 rounded border mt-2 border-gray-400 w-full"
-                value="14 -May -1980"
+                value={dayjs(data?.dob).format("DD - MMMM - YYYY")}
+                disabled
               />
             </div>
             <div className="mt-8">
@@ -85,9 +92,10 @@ const ProfileInfo = () => {
                 Date of Registration
               </label>
               <input
-                type="email"
+                type="text"
                 className="p-3 rounded border mt-2 border-gray-400 w-full"
-                value="30 - January - 2023"
+                value={dayjs(data?.createdAt).format("DD - MMMM - YYYY")}
+                disabled
               />
             </div>
           </div>

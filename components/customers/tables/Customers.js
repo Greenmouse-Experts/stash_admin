@@ -1,4 +1,4 @@
-import Table from "@/components/UI/table";
+import Table, { SelectColumnFilter } from "@/components/UI/table";
 import {
   useGetCustomersQuery,
   useLazyGetCustomersQuery,
@@ -11,26 +11,20 @@ import { DateRangePicker } from "react-date-range";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import { BsCalendarRangeFill } from "react-icons/bs";
+import { Initials } from "@/components/UI/tableInitials";
+import { PreLoader } from "@/components/UI/spinners";
 
 const CustomersTable = () => {
-  const [getCustomer] = useLazyGetCustomersQuery();
+  const { data, isLoading, isSuccess } = useGetCustomersQuery();
   const [selectedCustomers, setSelectedCustomers] = useState([]);
   const [customer, setCustomer] = useState([]);
-  const [isBusy, setIsBusy] = useState(false);
-  const [datePicker, setDatePicker] = useState(false)
+  const [datePicker, setDatePicker] = useState(false);
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
 
-  const GetCustomers = async () => {
-    setIsBusy(true);
-    const data = await getCustomer();
-    if (data.isSuccess) {
-      setCustomer(data.data.data);
-      setIsBusy(false);
-    }
-    setIsBusy(false);
-  };
   useEffect(() => {
-    GetCustomers();
-  }, []);
+    setCustomer(data?.data);
+  }, [data]);
 
   const columns = useMemo(
     () => [
@@ -42,9 +36,24 @@ const CustomersTable = () => {
         Header: "Name",
         accessor: "first_name",
         Cell: (row) => (
-          <p className="cursor-pointer">
-            {row.value} {row?.row.original.last_name}
-          </p>
+          <div className="flex items-center gap-x-2">
+            <Initials
+              firstName={row.value}
+              lastName={row?.row.original.last_name}
+            />
+            <p className="cursor-pointer">
+              <Link
+                href={{
+                  pathname: `/customers/${row?.row.original._id}`,
+                  query: {
+                    sort: row?.row.original._id,
+                  },
+                }}
+              >
+                {row.value} {row?.row.original.last_name}
+              </Link>
+            </p>
+          </div>
         ),
       },
       {
@@ -58,6 +67,8 @@ const CustomersTable = () => {
       {
         Header: "Levels",
         accessor: "products[0].role.name",
+        Filter: SelectColumnFilter,
+        filter: "includes",
       },
       {
         Header: "Status",
@@ -77,12 +88,23 @@ const CustomersTable = () => {
     []
   );
 
-  const data = useMemo(() => customer, []);
+  const list = useMemo(() => customer, []);
 
   // date range
 
   const handleSelect = (date) => {
-    console.log(date);
+    setStartDate(date.selection.startDate);
+    setEndDate(date.selection.endDate);
+    let filtered = customer.filter((product) => {
+      let productDate = new Date(product["createdAt"]);
+      return (
+        productDate >= date.selection.startDate &&
+        productDate <= date.selection.endDate
+      );
+    });
+    closeModal();
+    setCustomer(filtered);
+    console.log(filtered);
   };
 
   const selectionRange = {
@@ -92,21 +114,37 @@ const CustomersTable = () => {
   };
 
   const closeModal = () => {
-    setDatePicker(false)
-  }
+    setDatePicker(false);
+  };
+
   return (
-    <div className="min-h-[100px] ">
-      {isBusy && <p>Loading</p>}
-      {customer && !isBusy && !customer.length && (
+    <div className="min-h-[300px] ">
+      {isLoading && <PreLoader/>}
+      {!isLoading && !data?.data.length && (
         <EmptyState1 message="No data available" />
       )}
-      {customer && !!customer.length && (
+      {isSuccess && !!data?.data.length && (
         <div>
-          <div className="flex justify-end relative">
-            <div className="border border-2 items-center flex gap-x-2 fs-500 rounded px-3 py-2 bg-light" onClick={() => setDatePicker(!datePicker)}><BsCalendarRangeFill className="text-primary"/>Filter Date Range </div>
-            {datePicker && <div className="absolute top-12 border"><DateRangePicker showDateDisplay={false} ranges={[selectionRange]} onChange={handleSelect} /></div>}
+          <div className="flex justify-end relative top-12">
+            <div
+              className="border border-2 items-center flex gap-x-2 fs-500 rounded px-3 py-2 bg-light"
+              onClick={() => setDatePicker(!datePicker)}
+            >
+              <BsCalendarRangeFill className="text-primary" />
+              Filter Date Range{" "}
+            </div>
+            {datePicker && (
+              <div className="absolute top-12 border">
+                <DateRangePicker
+                  showSelectionPreview={true}
+                  showDateDisplay={false}
+                  ranges={[selectionRange]}
+                  onChange={handleSelect}
+                />
+              </div>
+            )}
           </div>
-          <Table columns={columns} data={data} />
+          <Table columns={columns} data={data?.data} />
         </div>
       )}
       {/* <table className="min-w-full text-left">

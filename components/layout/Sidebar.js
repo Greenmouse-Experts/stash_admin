@@ -112,21 +112,6 @@ export default function SidebarLayout() {
           <SubMenu
             label="Settings"
             icon={<BsGear />}
-            menuItemStyles={{
-              button: ({ level, active, disabled }) => {
-                if (level === 0)
-                  return {
-                    color: disabled ? "#ffff" : "#fff",
-                    backgroundColor: active ? "#eecef9" : undefined,
-                    "&:hover": {
-                      backgroundColor: "#6151DD !important",
-                      color: "white !important",
-                      borderRadius: "10px !important",
-                      fontWeight: "bold !important",
-                    },
-                  };
-              },
-            }}
           >
             <MenuItem
               className="!hover:bg-[#6151DD]"

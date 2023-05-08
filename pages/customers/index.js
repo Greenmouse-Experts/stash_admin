@@ -9,7 +9,7 @@ const CustomerPage = () => {
       <div>
         <div className="flex justify-between items-center">
           <div className="text-3xl fw-600">Customers</div>
-          <div className="flex items-center gap-x-4 justify-end">
+          <div className="flex w-6/12 overflow-auto items-center gap-x-4 justify-end">
                 <div>
                   <p className="fw-500 fs-400 text-primary">Referral Summary</p>
                 </div>
@@ -26,7 +26,7 @@ const CustomerPage = () => {
                     <p className="fs-600 fw-600"> 1,100</p>
                 </div>
                 <div className="px-4 flex items-center gap-x-2 h-8 bg-white rounded-md shadow">
-                    <p className="fs-400 text-gray-500">Paid Bonus</p>
+                    <p className="fs-400 text-gray-500 whitespace-nowrap">Paid Bonus</p>
                     <p className="fs-600 fw-600"> 1,000</p>
                 </div>
             </div>

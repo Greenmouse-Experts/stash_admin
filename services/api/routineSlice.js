@@ -2,9 +2,7 @@
 
 import { apiSlice } from "../apiSlice";
 import {
-  requestLocation,
   requestAuthorization,
-  requestUserId,
 } from "../helpers";
 import * as ENDPOINT from "../constants";
 
@@ -31,10 +29,22 @@ export const routineApiSlice = apiSlice.injectEndpoints({
           method: ENDPOINT.HTTP_METHODS.GET,
           
         }),
+        keepUnusedDataFor: ENDPOINT.CACHE_LIFETIME.TINY,
+      }),
+
+      getCustomerDetail: builder.query({
+        query: (id) => ({
+          url: `${ENDPOINT.GET_CUSTOMER_DETAIL}/${id}/view`,
+          headers: {
+            Authorization: requestAuthorization(),
+          },
+          method: ENDPOINT.HTTP_METHODS.GET,
+          
+        }),
         keepUnusedDataFor: ENDPOINT.CACHE_LIFETIME.DEFAULT,
       }),
   }),
   overrideExisting: true,
 });
 
-export const { useLazyUploadImageQuery, useGetCustomersQuery, useLazyGetCustomersQuery } = routineApiSlice;
+export const { useLazyUploadImageQuery, useGetCustomersQuery, useLazyGetCustomersQuery, useGetCustomerDetailQuery } = routineApiSlice;

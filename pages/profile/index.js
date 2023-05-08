@@ -19,7 +19,6 @@ import { useLazyUploadImageQuery } from "@/services/api/routineSlice";
 import ChangePassword from "@/components/profile/ChangePassword";
 
 const ProfilePage = () => {
-  const [profileImage, setProfileImage] = useState();
   const [preview, setPreview] = useState();
   const user = useSelector((state) => state.auth.auth);
 
@@ -28,7 +27,6 @@ const ProfilePage = () => {
 
   const changeProfileImage = async (e) => {
     e.preventDefault();
-    setProfileImage(e.target.files[0]);
     const objectUrl = URL.createObjectURL(e.target.files[0]);
     setPreview(objectUrl);
     const formData = new FormData();
@@ -36,9 +34,8 @@ const ProfilePage = () => {
     await upload(formData)
       .then((res) => {
         if (res.isSuccess) {
-          const payload = encryptPayload({photo: res.data[0]})
-          editProfile(payload);
-          toast.success(res.data.msg);
+          const payload = encryptPayload({image: res.data[0]})
+          postProfilePicture(payload)
           setIsBusy(false);
         }
 
@@ -57,6 +54,24 @@ const ProfilePage = () => {
 
   const [isBusy, setIsBusy] = useState(false);
 
+  const postProfilePicture = (payload) => {
+    editProfile(payload)
+    .then((res) => {
+      if (res.isSuccess) {
+        toast.success(res.data.msg);
+        setIsBusy(false);
+      }
+
+      if (res.isError) {
+        toast.error(res.error.data.msg);
+        setIsBusy(false);
+      }
+    })
+    .catch((err) => {
+      toast.error(err?.data?.msg);
+      setIsBusy(false);
+    });
+  }
 
   const {
     control,
@@ -117,8 +132,8 @@ const ProfilePage = () => {
               src={
                 preview
                   ? preview
-                  : user?.photo
-                  ? user?.photo
+                  : data?.data?.image
+                  ? data?.data?.image
                   : "https://res.cloudinary.com/greenmouse-tech/image/upload/v1680190106/Stash/PHOTO-2022-10-21-09-00-15_1_sy91nw.png"
               }
               alt="profile"
