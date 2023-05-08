@@ -99,7 +99,7 @@ const ProfilePage = () => {
       };
       reset(defaults);
     }
-  }, [data]);
+  }, [data, reset]);
 
   const onSubmit = async (data) => {
     setIsBusy(true);

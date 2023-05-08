@@ -79,11 +79,12 @@ const Table = ({columns, data}) => {
                     <div className="overflow-hidden  sm:rounded-lg">
                         <table {...getTableProps()} className="items-center w-full bg-transparent border-collapse">
                             <thead className="thead-light bg-light">
-                                {headerGroups.map((headerGroup) => (
-                                <tr {...headerGroup.getHeaderGroupProps()}>
-                                    {headerGroup.headers.map((column) => (
+                                {headerGroups.map((headerGroup, index) => (
+                                <tr {...headerGroup.getHeaderGroupProps()} key={index}>
+                                    {headerGroup.headers.map((column, index) => (
                                     <th 
                                     scope="col"
+                                    key={index}
                                     className="px-2 pl-3 text-primary align-middle border-b border-solid border-gray-200 py-3 fs-500 whitespace-nowrap text-left"
                                     {...column.getHeaderProps()}>{column.render("Header")}</th>
                                     ))}
@@ -96,10 +97,10 @@ const Table = ({columns, data}) => {
                                 {page.map((row, i) => {
                                 prepareRow(row);
                                 return (
-                                    <tr 
+                                    <tr key={i}
                                         {...row.getRowProps()}>
-                                    {row.cells.map((cell) => {
-                                        return <td className="border-b border-gray-200 align-middle fs-500 whitespace-nowrap px-2 py-4 text-left" {...cell.getCellProps()}>{cell.render("Cell")}</td>;
+                                    {row.cells.map((cell, index) => {
+                                        return <td key={index} className="border-b border-gray-200 align-middle fs-500 whitespace-nowrap px-2 py-4 text-left" {...cell.getCellProps()}>{cell.render("Cell")}</td>;
                                     })}
                                     </tr>
                                 );
