@@ -11,7 +11,7 @@ const CustomerPage = () => {
           <div className="text-3xl fw-600">Customers</div>
           <div className="flex w-6/12 overflow-auto items-center gap-x-4 justify-end">
                 <div>
-                  <p className="fw-500 fs-400 text-primary">Referral Summary</p>
+                  <p className="fw-500 fs-400 text-primary whitespace-nowrap">Referral Summary</p>
                 </div>
                 <div className="px-4 ml-6 flex items-center gap-x-2 h-8 bg-white rounded-md shadow">
                     <p className="fs-400 text-gray-500">Qualified</p>

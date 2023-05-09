@@ -53,7 +53,7 @@ const Header = () => {
                   <BsBell className="text-2xl" />
                 </Button>
               </MenuHandler>
-              <MenuList className="!index-30 lg:w-72 p-0 rounded-none">
+              <MenuList className="!index-30 w-64 lg:w-72 p-0 rounded-none">
                 <div className="bg-primary mb-3 text-white p-3 py-2">
                   <p className="fs-500">Notifications</p>
                 </div>
