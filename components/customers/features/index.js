@@ -145,7 +145,7 @@ const Details = ({ data, refetch }) => {
             </p>
           </div>
         </div>
-        <div className="flex gap-x-4 mt-6 md:mt-0 items-center">
+        <div className="flex overflow-x-auto scroll-pro gap-x-4 mt-6 md:mt-0 items-center">
           <div className="fw-500 border rounded border-gray-300">
             <Button className="bg-transparent text-md flex items-center font-normal shadow-none text-black capitalize">
               Reset
@@ -223,7 +223,7 @@ const Details = ({ data, refetch }) => {
       </div>
       {/* 5 cols in flex */}
       <div className="w-full overflow-x-auto pb-4 scroll-pro">
-        <div className="w-180 grid gap-y-12 grid-cols-1  md:grid-cols-2 lg:grid-cols-5 gap-x-10 mt-12">
+        <div className="w-full lg:w-180 grid gap-y-12 grid-cols-1  md:grid-cols-2 lg:grid-cols-5 gap-x-10 mt-12">
           <div className="p-8 bg-white bord-b border-purple-700 rounded-t-lg">
             <p className="fw-500 text-gray-500">Main Balance</p>
             <p className="fw-600 text-xl mt-8 mb-4">
@@ -262,8 +262,8 @@ const Details = ({ data, refetch }) => {
         </div>
       </div>
       <div className="mt-12 lg:mt-16">
-        <div className="w-full oveflow-x-auto">
-          <ul className="flex w-full oveflow-x-auto text-gray-400 fs-500">
+        <div className="w-full overflow-x-auto scroll-pro">
+          <ul className="flex w-150 lg:w-full text-gray-400 fs-500">
             <li
               className="nav-item px-5 lg:px-16 py-2 lg:py-4 cursor-pointer fs-800"
               style={open === 1 ? activeStyle : undefined}
