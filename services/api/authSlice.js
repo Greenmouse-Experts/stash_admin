@@ -2,7 +2,7 @@
 
 import { apiSlice } from "../apiSlice";
 import * as ENDPOINT from "../constants";
-import { requestAuthorization } from "../helpers";
+import { refreshToken, requestAuthorization } from "../helpers";
 
 export const authApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -16,15 +16,22 @@ export const authApiSlice = apiSlice.injectEndpoints({
       }),
       keepUnusedDataFor: ENDPOINT.CACHE_LIFETIME.DEFAULT,
     }),
+    refetchToken: builder.query({
+      query: () => ({
+        url: `${ENDPOINT.VERIFY_TOKEN}`,
+        method: ENDPOINT.HTTP_METHODS.GET,
+        headers: {
+          Authorization: refreshToken(),
+        },
+      }),
+      keepUnusedDataFor: ENDPOINT.CACHE_LIFETIME.DEFAULT,
+    }),
     getProfile: builder.query({
       query: () => ({
         url: `${ENDPOINT.GET_PROFILE}`,
         method: ENDPOINT.HTTP_METHODS.GET,
-        headers: {
-          Authorization: requestAuthorization(),
-        },
       }),
-      keepUnusedDataFor: ENDPOINT.CACHE_LIFETIME.DEFAULT,
+      keepUnusedDataFor: ENDPOINT.CACHE_LIFETIME.EXTENDED,
     }),
     editProfile: builder.query({
       query: (payload) => ({
@@ -56,9 +63,12 @@ export const authApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
+  refetchToken,
   useLazyLoginQuery,
   useLazyEditProfileQuery,
   useGetProfileQuery,
+  useLazyRefetchTokenQuery,
+  useRefetchTokenQuery,
   useUpdateAdminPasswordMutation,
   useLazyUpdateAdminPasswordQuery
 } = authApiSlice;

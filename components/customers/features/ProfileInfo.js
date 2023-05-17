@@ -1,8 +1,59 @@
+import React, { useState } from "react";
 import dayjs from "dayjs";
 import Image from "next/image";
-import React from "react";
+import { useLazyActvateCustomerQuery, useLazyDeactvateCustomerQuery } from "@/services/api/routineSlice";
+import { Button } from "@/components/UI/button";
+import { toast } from "react-toastify";
+import { HashSpinner } from "@/components/UI/spinners";
 
-const ProfileInfo = ({data}) => {
+
+const ProfileInfo = ({data, refetch}) => {
+
+  const [activate] = useLazyActvateCustomerQuery()
+  const [deactivate] = useLazyDeactvateCustomerQuery()
+  const [isBusy, setIsBusy] = useState(false)
+
+  const id = data?._id;
+
+  const deactivateCustomer = async() => {
+    setIsBusy(true)
+    await deactivate(id)
+      .then((res) => {
+        if (res.isSuccess) {
+          toast.success(res.data.msg);
+          refetch()
+        }
+        if (res.isError) {
+          toast.error(res.error.data.msg);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error(error.data.msg);
+      });
+      setIsBusy(false)
+  }
+
+  const activateCustomer = async() => {
+    setIsBusy(true)
+    await activate(id)
+      .then((res) => {
+        if (res.isSuccess) {
+          toast.success(res.data.msg);
+          setIsBusy(false)
+          refetch()
+        }
+        if (res.isError) {
+          toast.error(res.error.data.msg);
+          setIsBusy(false)
+        }
+      })
+      .catch((error) => {
+        toast.error(error.data.msg);
+        setIsBusy(false)
+      });
+  }
+
   return (
     <div>
       <div className="py-16 border-b lg:flex ">
@@ -115,7 +166,7 @@ const ProfileInfo = ({data}) => {
               <input
                 type="text"
                 className="p-3 rounded border mt-2 border-gray-400 w-full"
-                value="Plot 412, street, maitama"
+                value={data?.contact_address?.residential_address}
               />
             </div>
             <div className="mt-8">
@@ -125,7 +176,7 @@ const ProfileInfo = ({data}) => {
               <input
                 type="text"
                 className="p-3 rounded border mt-2 border-gray-400 w-full"
-                value="Abuja"
+                value={data?.contact_address?.state}
               />
             </div>
             <div className="mt-8">
@@ -133,7 +184,7 @@ const ProfileInfo = ({data}) => {
               <input
                 type="text"
                 className="p-3 rounded border mt-2 border-gray-400 w-full"
-                value="Nigeria"
+                value={data?.contact_address?.country}
               />
             </div>
           </div>
@@ -145,7 +196,7 @@ const ProfileInfo = ({data}) => {
               <input
                 type="text"
                 className="p-3 rounded border mt-2 border-gray-400 w-full"
-                value="AMAC"
+                value={data?.contact_address?.lga_area}
               />
             </div>
             <div className="mt-8">
@@ -153,14 +204,14 @@ const ProfileInfo = ({data}) => {
               <input
                 type="email"
                 className="p-3 rounded border mt-2 border-gray-400 w-full"
-                value="Near Oando Stand"
+                value={data?.contact_address?.landmark}
               />
             </div>
-            <div className="mt-8 text-end">
+            {/* <div className="mt-8 text-end">
               <button className="px-4 py-1 text-primary border border-indigo-300 rounded">
                 Edit
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -220,7 +271,7 @@ const ProfileInfo = ({data}) => {
               <input
                 type="text"
                 className="p-3 rounded border mt-2 border-gray-400 w-full"
-                placeholder="Emmanuel Jonah"
+                value={data?.wallet[0]?.account_name}
               />
             </div>
             <div className="mt-8">
@@ -239,7 +290,7 @@ const ProfileInfo = ({data}) => {
               </label>
               <div className="w-full  flex items-center p-3 rounded border mt-2 border-gray-400">
                 <Image
-                  src="https://res.cloudinary.com/greenmouse-tech/image/upload/v1679581107/Stash/PHOTO-2022-10-21-09-00-15_1_z2kh53.png"
+                  src="https://res.cloudinary.com/greenmouse-tech/image/upload/v1684253872/Stash/face_apebox.png"
                   alt="banner"
                   width={200}
                   height={100}
@@ -260,7 +311,7 @@ const ProfileInfo = ({data}) => {
               <input
                 type="text"
                 className="p-3 rounded border mt-2 border-gray-400 w-full"
-                value="Zenith Bank"
+                value={data?.wallet[0]?.bank_name}
               />
             </div>
             <div className="mt-8">
@@ -270,7 +321,7 @@ const ProfileInfo = ({data}) => {
               <input
                 type="number"
                 className="p-3 rounded border mt-2 border-gray-400 w-full"
-                value="11727829220"
+                value={data?.wallet[0]?.account_number}
               />
             </div>
             <div className="mt-8">
@@ -310,7 +361,7 @@ const ProfileInfo = ({data}) => {
               <input
                 type="text"
                 className="p-3 rounded border mt-2 border-gray-400 w-full"
-                placeholder="Emmanuel Atikulu"
+                value={`${data?.next_of_kin?.first_name} ${data?.next_of_kin?.last_name}`}
               />
             </div>
             <div className="mt-8">
@@ -320,7 +371,7 @@ const ProfileInfo = ({data}) => {
               <input
                 type="text"
                 className="p-3 rounded border mt-2 border-gray-400 w-full"
-                value="josephatikulu@gmail.com"
+                value={data?.next_of_kin?.email}
               />
             </div>
             <div className="mt-8">
@@ -330,7 +381,7 @@ const ProfileInfo = ({data}) => {
               <input
                 type="text"
                 className="p-3 rounded border mt-2 border-gray-400 w-full"
-                value="2, Metalbox , ikeja , Lagos"
+                value={data?.next_of_kin?.address}
               />
             </div>
           </div>
@@ -342,7 +393,7 @@ const ProfileInfo = ({data}) => {
               <input
                 type="text"
                 className="p-3 rounded border mt-2 border-gray-400 w-full"
-                value="223444829"
+                value="no data"
               />
             </div>
             <div className="mt-8">
@@ -352,7 +403,7 @@ const ProfileInfo = ({data}) => {
               <input
                 type="email"
                 className="p-3 rounded border mt-2 border-gray-400 w-full"
-                value="Father"
+                value={data?.next_of_kin?.relationship}
               />
             </div>
             <div className="mt-8">
@@ -360,7 +411,7 @@ const ProfileInfo = ({data}) => {
               <input
                 type="email"
                 className="p-3 rounded border mt-2 border-gray-400 w-full"
-                value="09000000000"
+                value={data?.next_of_kin?.phone_numbers[0]}
               />
             </div>
           </div>
@@ -381,7 +432,7 @@ const ProfileInfo = ({data}) => {
                 <input
                   type="text"
                   className="p-3 rounded border mt-2 border-gray-400 w-full"
-                  value="Emmanuel Atikulu"
+                  value="Emmanuel Atikulu*"
                 />
               </div>
               <div className="mt-8">
@@ -391,8 +442,7 @@ const ProfileInfo = ({data}) => {
                 <input
                   type="number"
                   className="p-3 rounded border mt-2 border-gray-400 w-full"
-                  placeholder="Emmanuel Atikulu"
-                  value="09026195990"
+                  value={data?.bvn?.phone_number}
                 />
               </div>
             </div>
@@ -404,7 +454,7 @@ const ProfileInfo = ({data}) => {
                 <input
                   type="text"
                   className="p-3 rounded border mt-2 border-gray-400 w-full"
-                  value="13/08/1980"
+                  value="13/08/1980*"
                 />
               </div>
               <div className="mt-8">
@@ -414,7 +464,7 @@ const ProfileInfo = ({data}) => {
                 <input
                   type="email"
                   className="p-3 rounded border mt-2 border-gray-400 w-full"
-                  value="2, Bale Street, Ikeja, Lagos"
+                  value="2, Bale Street, Ikeja, Lagos*"
                 />
               </div>
             </div>
@@ -600,9 +650,12 @@ const ProfileInfo = ({data}) => {
         </div>
       </div>
       <div className="mt-16 text-center">
-        <button className="bg-red-500 lg:px-36 px-10 py-5 rounded-md text-white fw-600">
-          Deactivate Customer
-        </button>
+        {
+          data?.active?
+          <Button title={isBusy? <HashSpinner size={25} color="white"/> : "Deactivate Customer"} altClassname='w-8/12 lg:w-6/12 bg-red-600 py-3 fw-600 text-white text-lg rounded-lg' onClick={() => deactivateCustomer()}/>
+          :
+          <Button title={isBusy? <HashSpinner size={25} color="white"/> : "Activate Customer"}  altClassname='w-8/12 lg:w-6/12 btn-primary py-3 fw-600 text-lg rounded-lg' onClick={() => activateCustomer()}/>
+        }
       </div>
     </div>
   );

@@ -12,7 +12,7 @@ import {
 import { setupListeners } from '@reduxjs/toolkit/query'
 import storage from "redux-persist/lib/storage";
 import { RESET_STATE_ACTION_TYPE } from "./actions/resetState";
-import { apiSlice } from "@/services/apiSlice";
+import { apiSlice, rtkQueryErrorLogger } from "@/services/apiSlice";
 import authReducer from "./reducers/authSlice"
 import userReducer from "./reducers/userSlice";
 
@@ -48,6 +48,7 @@ const reducers = {
         },
       }).concat([
         // add middlewares here
+        rtkQueryErrorLogger,
         apiSlice.middleware,
       ]),
   });

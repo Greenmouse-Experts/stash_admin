@@ -1,4 +1,7 @@
-import Table, { SelectColumnFilter } from "@/components/UI/table";
+import Table, {
+  BooleanFilter,
+  SelectColumnFilter,
+} from "@/components/UI/table";
 import {
   useGetCustomersQuery,
   useLazyGetCustomersQuery,
@@ -13,6 +16,7 @@ import "react-date-range/dist/theme/default.css"; // theme css file
 import { BsCalendarRangeFill } from "react-icons/bs";
 import { Initials } from "@/components/UI/tableInitials";
 import { PreLoader } from "@/components/UI/spinners";
+import Image from "next/image";
 
 const CustomersTable = () => {
   const { data, isLoading, isSuccess } = useGetCustomersQuery();
@@ -24,6 +28,7 @@ const CustomersTable = () => {
 
   useEffect(() => {
     setCustomer(data?.data);
+    setSelectedCustomers(data?.data);
   }, [data]);
 
   const columns = useMemo(
@@ -36,24 +41,33 @@ const CustomersTable = () => {
         Header: "Name",
         accessor: "first_name",
         Cell: (row) => (
-          <div className="flex items-center gap-x-2">
-            <Initials
-              firstName={row.value}
-              lastName={row?.row.original.last_name}
-            />
+          <Link
+            href={{
+              pathname: `/customers/${row?.row.original._id}`,
+              query: {
+                sort: row?.row.original._id,
+              },
+            }}
+            className="flex items-center gap-x-2"
+          >
+            {row?.row.original.image ? (
+              <Image
+                src={row?.row.original.image}
+                alt="profile"
+                width={100}
+                height={100}
+                className=" w-7 h-7 circle"
+              />
+            ) : (
+              <Initials
+                firstName={row.value}
+                lastName={row?.row.original.last_name}
+              />
+            )}
             <p className="cursor-pointer">
-              <Link
-                href={{
-                  pathname: `/customers/${row?.row.original._id}`,
-                  query: {
-                    sort: row?.row.original._id,
-                  },
-                }}
-              >
-                {row.value} {row?.row.original.last_name}
-              </Link>
+              {row.value} {row?.row.original.last_name}
             </p>
-          </div>
+          </Link>
         ),
       },
       {
@@ -74,10 +88,11 @@ const CustomersTable = () => {
         Header: "Status",
         accessor: "active",
         Cell: (props) => (
-          <p>
-            {props.value ? FormatStatus["Active"] : FormatStatus["inactive"]}
-          </p>
+          <div>
+            {props.value ? FormatStatus["Active"] : FormatStatus["Inactive"]}
+          </div>
         ),
+        Filter: BooleanFilter,
       },
       {
         Header: "Date",
@@ -88,7 +103,7 @@ const CustomersTable = () => {
     []
   );
 
-  const list = useMemo(() => customer, []);
+  const list = useMemo(() => selectedCustomers, [selectedCustomers]);
 
   // date range
 
@@ -103,7 +118,7 @@ const CustomersTable = () => {
       );
     });
     closeModal();
-    setCustomer(filtered);
+    setSelectedCustomers(filtered);
     console.log(filtered);
   };
 
@@ -119,22 +134,22 @@ const CustomersTable = () => {
 
   return (
     <div className="min-h-[300px] ">
-      {isLoading && <PreLoader/>}
+      {isLoading && <PreLoader />}
       {!isLoading && !data?.data.length && (
         <EmptyState1 message="No data available" />
       )}
       {isSuccess && !!data?.data.length && (
         <div>
-          <div className="flex justify-end relative top-12">
+          <div className="flex justify-end relative md:top-12 mb-2 lg:mb-0">
             <div
-              className="border border-2 items-center flex gap-x-2 fs-500 rounded px-3 py-2 bg-light"
+              className="border border-2 items-center flex gap-x-2 fs-500 rounded px-3 py-2 bg-light cursor-pointer"
               onClick={() => setDatePicker(!datePicker)}
             >
               <BsCalendarRangeFill className="text-primary" />
               Filter Date Range{" "}
             </div>
             {datePicker && (
-              <div className="absolute top-12 border">
+              <div className="md:absolute md:top-12 border">
                 <DateRangePicker
                   showSelectionPreview={true}
                   showDateDisplay={false}
@@ -144,96 +159,9 @@ const CustomersTable = () => {
               </div>
             )}
           </div>
-          <Table columns={columns} data={data?.data} />
+          {selectedCustomers && <Table columns={columns} data={list} />}
         </div>
       )}
-      {/* <table className="min-w-full text-left">
-            <thead className="font-medium">
-                <tr>
-                    <th scope="col" className="px-4 text-gray-400 align-middle py-3 whitespace-nowrap text-left">S/N</th>
-                    <th scope="col" className="px-4 text-gray-400 align-middle py-3 whitespace-nowrap text-left">Name</th>
-                    <th scope="col" className="px-4 text-gray-400 align-middle py-3 whitespace-nowrap text-left">Email</th>
-                    <th scope="col" className="px-4 text-gray-400 align-middle py-3 whitespace-nowrap text-left">Phone no</th>
-                    <th scope="col" className="px-4 text-gray-400 align-middle py-3 whitespace-nowrap text-left">Levels</th>
-                    <th scope="col" className="px-4 text-gray-400 align-middle py-3 whitespace-nowrap text-left">Status</th>
-                    <th scope="col" className="px-4 text-gray-400 align-middle py-3 whitespace-nowrap text-left">Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr className="font-medium">
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">1</td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left"><Link href='/customers/details'>Odinchazoihe Kayode</Link></td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">Odinchazoihekayode@gmail.com</td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">08123456789</td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">Tier 1</td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left"><p className='px-3 py-1 rounded text-center bg-green-50 text-green-600 border border-green-500'>Active</p></td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">Mar 02, 23 - 9:22</td>
-                </tr>
-                <tr className="font-medium">
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">2</td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">Odinchazoihe Kayode</td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">Odinchazoihekayode@gmail.com</td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">08123456789</td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">Tier 2</td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left"><p className='px-3 py-1 rounded text-center bg-green-50 text-green-600 border border-green-500'>Active</p></td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">Mar 02, 23 - 9:22</td>
-                </tr>
-                <tr className="font-medium">
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">3</td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">Odinchazoihe Kayode</td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">Odinchazoihekayode@gmail.com</td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">08123456789</td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">Tier 1</td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left"><p className='px-3 py-1 rounded text-center bg-red-50 text-red-600 border border-red-500'>Inactive</p></td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">Mar 02, 23 - 9:22</td>
-                </tr>
-                <tr className="font-medium">
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">4</td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">Odinchazoihe Kayode</td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">Odinchazoihekayode@gmail.com</td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">08123456789</td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">1Tier 1</td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left"><p className='px-3 py-1 rounded text-center bg-green-50 text-green-600 border border-green-500'>Active</p></td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">Mar 02, 23 - 9:22</td>
-                </tr>
-                <tr className="font-medium">
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">5</td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">Odinchazoihe Kayode</td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">Odinchazoihekayode@gmail.com</td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">08123456789</td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">Tier 1</td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left"><p className='px-3 py-1 rounded text-center bg-green-50 text-green-600 border border-green-500'>Active</p></td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">Mar 02, 23 - 9:22</td>
-                </tr>
-                <tr className="font-medium">
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">6</td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">Odinchazoihe Kayode</td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">Odinchazoihekayode@gmail.com</td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">08123456789</td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">Tier 2</td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left"><p className='px-3 py-1 rounded text-center bg-green-50 text-green-600 border border-green-500'>Active</p></td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">Mar 02, 23 - 9:22</td>
-                </tr>
-                <tr className="font-medium">
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">7</td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">Odinchazoihe Kayode</td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">Odinchazoihekayode@gmail.com</td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">08123456789</td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">Tier 1</td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left"><p className='px-3 py-1 rounded text-center bg-red-50 text-red-600 border border-red-500'>Inactive</p></td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">Mar 02, 23 - 9:22</td>
-                </tr>
-                <tr className="font-medium">
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">8</td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">Odinchazoihe Kayode</td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">Odinchazoihekayode@gmail.com</td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">08123456789</td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">1Tier 1</td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left"><p className='px-3 py-1 rounded text-center bg-green-50 text-green-600 border border-green-500'>Active</p></td>
-                    <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">Mar 02, 23 - 9:22</td>
-                </tr>
-            </tbody>
-        </table> */}
     </div>
   );
 };

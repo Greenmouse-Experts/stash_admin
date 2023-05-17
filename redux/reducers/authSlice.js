@@ -11,6 +11,7 @@ const initialState = {
     phone_number: "",
     photo: "",
     userType: -1,
+    timeStamp: 0,
   },
 };
 

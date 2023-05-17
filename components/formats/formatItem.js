@@ -24,3 +24,10 @@ export const FormatStatus =  {
   export const formatDate = (value) => {
     return dayjs(value).format("MMM DD, YY - HH:mm")
   }
+
+  export const FormatRestriction = {
+    "withdrawal": <p className="fw-500 py-1 fs-500">Withdrawal</p>,
+    "transfer": <p className="fw-500 py-1 fs-500">Transfer</p>,
+    "documentation": <p className="fw-500 py-1 fs-500">Documentation</p>,
+    "fraud": <p className="fw-500 py-1 fs-500">Fraud</p>
+  }
