@@ -3,7 +3,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { BASE_URL, CACHE_LIFETIME } from "./constants";
 import { isRejected, isRejectedWithValue } from "@reduxjs/toolkit";
-import { refreshToken, requestAuthorization } from "./helpers";
+import { refreshToken } from "./helpers";
 import { store } from "@/redux/store";
 import { toast } from "react-toastify";
 import { saveAuth } from "@/redux/reducers/authSlice";
