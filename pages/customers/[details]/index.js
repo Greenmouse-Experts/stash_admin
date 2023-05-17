@@ -11,14 +11,14 @@ const CustomerDetails = () => {
   const {
     query: { sort: id },
   } = router;
-  const { isLoading, isSuccess, isError, data } = useGetCustomerDetailQuery(id);
+  const { isLoading, isSuccess, isError, data, refetch } = useGetCustomerDetailQuery(id);
   
   
   return (
     <Layout>
       {isLoading && <PreLoader/>}
       {isError  && "Error ecountered"}
-      {isSuccess && <Details data={data.data[0]}/>}
+      {isSuccess && <Details data={data.data[0]} refetch={refetch}/>}
     </Layout>
   );
 };

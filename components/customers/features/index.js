@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import {
@@ -13,8 +13,16 @@ import CustomerSpend from "./CustomerSpend";
 import CustomerLoan from "./CustomerLoan";
 import ProfileInfo from "./ProfileInfo";
 import Transaction from "./Transaction";
+import {
+  useLazyFlagAccountQuery,
+  useLazyRestrictAllQuery,
+  useLazyUnRestrictAllQuery,
+  useLazyUnflagAccountQuery,
+} from "@/services/api/routineSlice";
+import { checkArray, encryptPayload } from "@/services/helpers";
+import { toast } from "react-toastify";
 
-const Details = ({data}) => {
+const Details = ({ data, refetch }) => {
   const [open, setOpen] = useState(1);
 
   const handleOpen = (value) => {
@@ -25,19 +33,112 @@ const Details = ({data}) => {
     color: "black",
     transition: "0.6s",
   };
+
+  const [restrict] = useLazyRestrictAllQuery();
+  const [flag] = useLazyFlagAccountQuery();
+  const [unRestrict] = useLazyUnRestrictAllQuery();
+  const [unFlag] = useLazyUnflagAccountQuery()
+  const id = data?._id;
+
+  const restrictUser = async (val) => {
+    const data = {
+      restriction: val,
+    };
+    const payload = encryptPayload(data);
+    await restrict({ id, payload })
+      .then((res) => {
+        if (res.isSuccess) {
+          toast.success(res.data.msg);
+          refetch()
+        }
+        if (res.isError) {
+          toast.error(res.error.data.msg);
+        }
+      })
+      .catch((error) => {
+        toast.error(error.data.msg);
+      });
+  };
+
+  const unRestrictUser = async (val) => {
+    const data = {
+      restriction: val,
+    };
+    const payload = encryptPayload(data);
+    await unRestrict({ id, payload })
+      .then((res) => {
+        if (res.isSuccess) {
+          toast.success(res.data.msg);
+          refetch()
+        }
+        if (res.isError) {
+          toast.error(res.error.data.msg);
+        }
+      })
+      .catch((error) => {
+        toast.error(error.data.msg);
+      });
+  };
+
+  const flagUser = async (val) => {
+    const data = {
+      flag: val,
+    };
+    const payload = encryptPayload(data);
+    await flag({ id, payload })
+      .then((res) => {
+        if (res.isSuccess) {
+          toast.success(res.data.msg);
+          refetch()
+        }
+        if (res.isError) {
+          toast.error(res.error.data.msg);
+        }
+      })
+      .catch((error) => {
+        toast.error(error.data.msg);
+      });
+  };
+
+  const unFlagUser = async (val) => {
+    const data = {
+      flag: val,
+    };
+    const payload = encryptPayload(data);
+    await unFlag({ id, payload })
+      .then((res) => {
+        if (res.isSuccess) {
+          toast.success(res.data.msg);
+          refetch()
+        }
+        if (res.isError) {
+          toast.error(res.error.data.msg);
+        }
+      })
+      .catch((error) => {
+        toast.error(error.data.msg);
+      });
+  };
+
   return (
     <div>
       <div className="md:flex items-center justify-between">
         <div className="flex items-center">
           <Image
-            src={data.image? data.image : "https://res.cloudinary.com/greenmouse-tech/image/upload/v1680003695/Stash/profile_rl7x7s.jpg"}
+            src={
+              data.image
+                ? data.image
+                : "https://res.cloudinary.com/greenmouse-tech/image/upload/v1680003695/Stash/profile_rl7x7s.jpg"
+            }
             alt="banner"
             width={200}
             height={100}
             className="w-28 h-28 circle"
           />
           <div className="ml-6">
-            <p className="text-2xl fw-500">{data.first_name} {data.last_name}</p>
+            <p className="text-2xl fw-500">
+              {data.first_name} {data.last_name}
+            </p>
             <p className="fs-500">{data?.products[0].role.name}</p>
             <p className="mt-3 fw-600 fs-400 text-primary">
               Account No: {data?.wallet[0].account_number}
@@ -64,8 +165,24 @@ const Details = ({data}) => {
                 >
                   Restrict from:
                 </div>
-                <MenuItem>Withdrawals</MenuItem>
-                <MenuItem>Transfer</MenuItem>
+                {checkArray(data?.wallet[0]?.restricted, "withdrawal") ? (
+                  <MenuItem onClick={() => unRestrictUser("withdrawal")}>
+                    UnRestrict Withdrawals
+                  </MenuItem>
+                ) : (
+                  <MenuItem onClick={() => restrictUser("withdrawal")}>
+                    Withdrawals
+                  </MenuItem>
+                )}
+                {checkArray(data?.wallet[0]?.restricted, "transfer") ? (
+                  <MenuItem onClick={() => unRestrictUser("transfer")}>
+                    Unrestrict Transfer
+                  </MenuItem>
+                ) : (
+                  <MenuItem onClick={() => restrictUser("transfer")}>
+                    Transfer
+                  </MenuItem>
+                )}
               </MenuList>
             </Menu>
           </div>
@@ -81,10 +198,24 @@ const Details = ({data}) => {
                   className="my-3 outline-none fw-500 text-black"
                   role="button"
                 >
-                  Flag from:
+                  Flag user:
                 </div>
-                <MenuItem>Withdrawals</MenuItem>
-                <MenuItem>Transfer</MenuItem>
+                {checkArray(data?.flagged, "fraud") ? (
+                  <MenuItem onClick={() => unFlagUser("fraud")}>
+                    Unflag Fraud
+                  </MenuItem>
+                ) : (
+                  <MenuItem onClick={() => flagUser("fraud")}>Fraud</MenuItem>
+                )}
+                {checkArray(data?.flagged, "documentation") ? (
+                  <MenuItem onClick={() => unFlagUser("documentation")}>
+                    Unflag Documentation
+                  </MenuItem>
+                ) : (
+                  <MenuItem onClick={() => flagUser("documentation")}>
+                    Documentation
+                  </MenuItem>
+                )}
               </MenuList>
             </Menu>
           </div>
@@ -95,27 +226,37 @@ const Details = ({data}) => {
         <div className="w-180 grid gap-y-12 grid-cols-1  md:grid-cols-2 lg:grid-cols-5 gap-x-10 mt-12">
           <div className="p-8 bg-white bord-b border-purple-700 rounded-t-lg">
             <p className="fw-500 text-gray-500">Main Balance</p>
-            <p className="fw-600 text-xl mt-8 mb-4">₦ {data?.wallet[0].amount.balance.toFixed(2)}</p>
+            <p className="fw-600 text-xl mt-8 mb-4">
+              ₦ {data?.wallet[0].amount.balance.toFixed(2)}
+            </p>
             <p className="ml-8 fw-600 text-gray-500">(70)</p>
           </div>
           <div className="p-8 bg-white bord-b border-orange-300 rounded-t-lg">
             <p className="fw-500 text-gray-500">Total Savings Balance</p>
-            <p className="fw-600 text-xl mt-8 mb-4">₦ {data?.wallet[0].amount.fixed_savings.toFixed(2)}</p>
+            <p className="fw-600 text-xl mt-8 mb-4">
+              ₦ {data?.wallet[0].amount.fixed_savings.toFixed(2)}
+            </p>
             <p className="ml-8 fw-600 text-gray-500">(70)</p>
           </div>
           <div className="p-8 bg-white bord-b border-green-500 rounded-t-lg">
             <p className="fw-500 text-gray-500">Fixed Savings Balance</p>
-            <p className="fw-600 text-xl mt-8 mb-4">₦ {data?.wallet[0].amount.fixed_savings.toFixed(2)}</p>
+            <p className="fw-600 text-xl mt-8 mb-4">
+              ₦ {data?.wallet[0].amount.fixed_savings.toFixed(2)}
+            </p>
             <p className="ml-8 fw-600 text-gray-500">(70)</p>
           </div>
           <div className="p-8 bg-white bord-b border-red-600 rounded-t-lg">
             <p className="fw-500 text-gray-500">Goal Savings Balance</p>
-            <p className="fw-600 text-xl mt-8 mb-4">₦ {data?.wallet[0].amount.goal_savings.toFixed(2)}</p>
+            <p className="fw-600 text-xl mt-8 mb-4">
+              ₦ {data?.wallet[0].amount.goal_savings.toFixed(2)}
+            </p>
             <p className="ml-8 fw-600 text-gray-500">(70)</p>
           </div>
           <div className="p-8 bg-white bord-b border-red-600 rounded-t-lg">
             <p className="fw-500 text-gray-500">Loan Balance</p>
-            <p className="fw-600 text-xl mt-8 mb-4">₦ {data?.wallet[0].amount.loans.toFixed(2)}</p>
+            <p className="fw-600 text-xl mt-8 mb-4">
+              ₦ {data?.wallet[0].amount.loans.toFixed(2)}
+            </p>
             <p className="ml-8 fw-600 text-gray-500">(70)</p>
           </div>
         </div>
@@ -164,7 +305,7 @@ const Details = ({data}) => {
           {open === 1 ? <CustomerSave /> : ""}
           {open === 2 ? <CustomerSpend /> : ""}
           {open === 3 ? <CustomerLoan /> : ""}
-          {open === 4 ? <ProfileInfo data={data}/> : ""}
+          {open === 4 ? <ProfileInfo data={data} refetch={refetch}/> : ""}
           {open === 5 ? <Transaction /> : ""}
         </div>
       </div>

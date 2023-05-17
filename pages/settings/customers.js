@@ -25,7 +25,9 @@ const CustomerSettings = () => {
                 <div className='flex text-gray-500 items-center mt-6 lg:mt-0 lg:ml-16'>
                     <p>Manage customers</p>
                     <MdKeyboardArrowRight className='text-xl mx-5'/>
-                    <p>Restricted</p>
+                    {open === 1 && <p>Restricted</p>}
+                    {open === 2 && <p>Flagged</p>}
+                    {open === 3 && <p>Deactivated</p>}
                 </div>
             </div>
             <div className='mt-12 lg:mt-16'>

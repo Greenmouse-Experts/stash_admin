@@ -15,6 +15,7 @@ import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import getCallBackRoute from "@/hooks/getCallBackRoute";
 import { HashSpinner } from "@/components/UI/spinners";
+import { getExpirationTime } from "@/services/getToken";
 
 
 const Login = () => {
@@ -51,6 +52,7 @@ const Login = () => {
               refreshToken: res.data.data.refreshToken,
               phone_number: res.data.data.phone_number,
               photo: res.data.data.profile.image,
+              timeStamp:  Date.now() + (.5 * 10 * 1000),
             })
           );
           toast.success(res.data.msg);
