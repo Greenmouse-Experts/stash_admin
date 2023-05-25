@@ -361,7 +361,7 @@ const ProfileInfo = ({data, refetch}) => {
               <input
                 type="text"
                 className="p-3 rounded border mt-2 border-gray-400 w-full"
-                value={`${data?.next_of_kin?.first_name} ${data?.next_of_kin?.last_name}`}
+                value={data?.next_of_kin?.first_name? `${data?.next_of_kin?.first_name} ${data?.next_of_kin?.last_name}` : ""}
               />
             </div>
             <div className="mt-8">

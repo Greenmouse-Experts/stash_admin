@@ -1,10 +1,12 @@
 import React from "react";
-import TransactionTable from "../tables/Transaction";
+// import TransactionTable from "../tables/Transaction";
+import { EmptyState1 } from "@/components/UI/emptyStates";
 
 const Transaction = () => {
   return (
     <div>
-      <div>
+      <EmptyState1 message="No Transactions Data Yet"/>
+      {/* <div>
         <div className="flex items-center gap-x-4">
           <div className="flex items-center gap-x-2">
             <p className="bg-primary w-6 h-3"></p>
@@ -21,7 +23,7 @@ const Transaction = () => {
       </div>
       <div>
         <TransactionTable/>
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -227,37 +227,37 @@ const Details = ({ data, refetch }) => {
           <div className="p-8 bg-white bord-b border-purple-700 rounded-t-lg">
             <p className="fw-500 text-gray-500">Main Balance</p>
             <p className="fw-600 text-xl mt-8 mb-4">
-              ₦ {parseInt(data?.wallet[0]?.amount?.balance).toFixed(2)}
+              ₦ {data?.wallet[0]?.amount?.balance}
             </p>
-            <p className="ml-8 fw-600 text-gray-500">(70)</p>
+            <p className="ml-8 fw-600 text-gray-500">(0)</p>
           </div>
           <div className="p-8 bg-white bord-b border-orange-300 rounded-t-lg">
             <p className="fw-500 text-gray-500">Total Savings Balance</p>
             <p className="fw-600 text-xl mt-8 mb-4">
-              ₦ {parseInt(data?.wallet[0]?.amount.fixed_savings).toFixed(2)}
+              ₦ {data?.wallet[0]?.amount.fixed_savings}
             </p>
-            <p className="ml-8 fw-600 text-gray-500">(70)</p>
+            <p className="ml-8 fw-600 text-gray-500">(0)</p>
           </div>
           <div className="p-8 bg-white bord-b border-green-500 rounded-t-lg">
             <p className="fw-500 text-gray-500">Fixed Savings Balance</p>
             <p className="fw-600 text-xl mt-8 mb-4">
-              ₦ {parseInt(data?.wallet[0]?.amount.fixed_savings).toFixed(2)}
+              ₦ {data?.wallet[0]?.amount.fixed_savings}
             </p>
-            <p className="ml-8 fw-600 text-gray-500">(70)</p>
+            <p className="ml-8 fw-600 text-gray-500">(0)</p>
           </div>
           <div className="p-8 bg-white bord-b border-red-600 rounded-t-lg">
             <p className="fw-500 text-gray-500">Goal Savings Balance</p>
             <p className="fw-600 text-xl mt-8 mb-4">
-              ₦ {parseInt(data?.wallet[0]?.amount.goal_savings).toFixed(2)}
+              ₦ {data?.wallet[0]?.amount.goal_savings}
             </p>
-            <p className="ml-8 fw-600 text-gray-500">(70)</p>
+            <p className="ml-8 fw-600 text-gray-500">(0)</p>
           </div>
           <div className="p-8 bg-white bord-b border-red-600 rounded-t-lg">
             <p className="fw-500 text-gray-500">Loan Balance</p>
             <p className="fw-600 text-xl mt-8 mb-4">
-              ₦ {parseInt(data?.wallet[0].amount.loans).toFixed(2)}
+              ₦ {data?.wallet[0].amount.loans}
             </p>
-            <p className="ml-8 fw-600 text-gray-500">(70)</p>
+            <p className="ml-8 fw-600 text-gray-500">(0)</p>
           </div>
         </div>
       </div>

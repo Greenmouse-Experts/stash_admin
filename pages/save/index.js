@@ -17,8 +17,9 @@ import CardExpiryTable from '@/components/save/tables/CardExpiry';
 import MainBusinChart from '@/components/save/charts/MainBusin';
 import SaversDataTable from '@/components/save/tables/SaversData';
 import WithdrawalDataTable from '@/components/save/tables/WithdrawalsData';
-import GoalSavings from '@/components/save/modals/GoalSavings';
 import FixedSavings from '@/components/save/modals/FixedSavings';
+import { useGetSavingsRateQuery } from '@/services/api/saveSlice';
+import SavingsModal from '@/components/save/modals/SavingsModal';
 
 const SavePage = () => {
     const { Modal, setShowModal, showModal, setModalBusy } = useModal();
@@ -38,15 +39,17 @@ const SavePage = () => {
         showModal: showSaysModal, 
         setModalBusy:setSaysModalBusy } = useModal();
     const { 
-        Modal:DollarModal, 
-        setShowModal:setShowDollarModal, 
-        showModal: showDollarModal, 
-        setModalBusy:setDollarModalBusy } = useModal();
+        Modal:SafoModal, 
+        setShowModal:setShowSafoModal, 
+        showModal: showSafoModal, 
+        setModalBusy:setSafoModalBusy } = useModal();
     const { 
-        Modal:SayeModal, 
-        setShowModal:setShowSayeModal, 
-        showModal: showSayeModal, 
-        setModalBusy:setSayeModalBusy } = useModal();
+        Modal:BusinessModal, 
+        setShowModal:setShowBusinessModal, 
+        showModal: showBusinessModal, 
+        setModalBusy:setBusinessModalBusy } = useModal();
+
+    const {isLoading, data: rate, isError, refetch} = useGetSavingsRateQuery()
 
   return (
     <Layout>
@@ -64,7 +67,7 @@ const SavePage = () => {
                                 </div>
                                 <div className='mt-6 fs-500 fw-500'>
                                     <p className=''>Goal Savings</p>
-                                    <p className='fs-400 mt-2'>14%</p>
+                                    <p className='fs-400 mt-2'>{rate && `${rate.data[3].interest_rate}%`}</p>
                                 </div>
                             </div>
                             <div className='pl-4 w-6/12'>
@@ -74,7 +77,7 @@ const SavePage = () => {
                                 </div>
                                 <div className='mt-6 fs-500 fw-500'>
                                     <p className=''>Main Savings</p>
-                                    <p className='fs-400 mt-2'>14%</p>
+                                    <p className='fs-400 mt-2'>{rate && `${rate.data[0].interest_rate}%`}</p>
                                 </div>
                             </div>
                         </div>
@@ -86,7 +89,7 @@ const SavePage = () => {
                                 </div>
                                 <div className='mt-6 fs-500 fw-500'>
                                     <p className=''>Fixed Savings</p>
-                                    <p className='fs-400 mt-2'>14% to 22%</p>
+                                    <p className='fs-400 mt-2'>{rate && `${rate.data[5].interest_rate}% to ${rate.data[5].interest_rate_2}%`}</p>
                                 </div>
                             </div>
                             <div className='pl-4 w-6/12'>
@@ -96,7 +99,7 @@ const SavePage = () => {
                                 </div>
                                 <div className='mt-6 fs-500 fw-500'>
                                     <p className=''>Save as you spend</p>
-                                    <p className='fs-400 mt-2'>14% <span className='text-gray-400'>(SAYS)</span></p>
+                                    <p className='fs-400 mt-2'>{rate && `${rate.data[2].interest_rate}%`}<span className='text-gray-400'>(SAYS)</span></p>
                                 </div>
                             </div>
                         </div>
@@ -104,21 +107,21 @@ const SavePage = () => {
                             <div className='border-r pr-4 w-6/12 border-gray-400'>
                                 <div className='flex justify-between items-center'>
                                     <Image src='https://res.cloudinary.com/greenmouse-tech/image/upload/v1680019395/Stash/Types_of_savings_xcbi1i.png' alt='banner' width={200} height={100} className='w-6'/>
-                                    <BsThreeDotsVertical className='cursor-pointer' onClick={() => setShowDollarModal(true)}/>
+                                    <BsThreeDotsVertical className='cursor-pointer' onClick={() => setShowBusinessModal(true)}/>
                                 </div>
                                 <div className='mt-6 fs-500 fw-500'>
                                     <p className=''>Business Savings</p>
-                                    <p className='fs-400 mt-2'>14%</p>
+                                    <p className='fs-400 mt-2'>{rate && `${rate.data[4].interest_rate}%`}</p>
                                 </div>
                             </div>
                             <div className='pl-4 w-6/12'>
                                 <div className='flex justify-between items-center'>
                                     <Image src='https://res.cloudinary.com/greenmouse-tech/image/upload/v1680019374/Stash/Types_of_savings_ed8nme.png' alt='banner' width={200} height={100} className='w-6'/>
-                                    <BsThreeDotsVertical className='cursor-pointer' onClick={() => setShowSayeModal(true)}/>
+                                    <BsThreeDotsVertical className='cursor-pointer' onClick={() => setShowSafoModal(true)}/>
                                 </div>
                                 <div className='mt-6 fs-500 fw-500'>
                                     <p className=''>Save for Others</p>
-                                    <p className='fs-400 mt-2'>14% <span className='text-gray-400'>(SAFO)</span></p>
+                                    <p className='fs-400 mt-2'>{rate && `${rate.data[1].interest_rate}%`} <span className='text-gray-400'>(SAFO)</span></p>
                                 </div>
                             </div>
                         </div>
@@ -339,23 +342,23 @@ const SavePage = () => {
             </div>
         </div>
         <Modal title="Change Goal Savings Interest Rate">
-            <GoalSavings/>
+            <SavingsModal type="goal" rate={rate?.data[3]?.interest_rate} closeModal={() => setShowModal(false)} refetch={refetch}/>
         </Modal>
-        <WalletModal title="Change Wallet Savings Interest Rate">
-            <GoalSavings/>
+        <WalletModal title="Change Main Savings Interest Rate">
+            <SavingsModal type="main" rate={rate?.data[0]?.interest_rate} closeModal={() => setShowWalletModal(false)}  refetch={refetch}/>
         </WalletModal>
         <FixedModal title="Change Fixed Savings Interest Rate">
-            <FixedSavings/>
+            <FixedSavings type="fixed" rate={rate?.data[5]?.interest_rate} rate2={rate?.data[5]?.interest_rate_2} closeModal={() => setShowFixedModal(false)}  refetch={refetch}/>
         </FixedModal>
         <SaysModal title="Change SAYS Interest Rate">
-            <GoalSavings/>
+            <SavingsModal type="says" rate={rate?.data[2]?.interest_rate} closeModal={() => setShowSaysModal(false)}  refetch={refetch}/>
         </SaysModal>
-        <SayeModal title="Change SAYE Interest Rate">
-            <GoalSavings/>
-        </SayeModal>
-        <DollarModal title="Change US Dollar Savings Interest Rate">
-            <GoalSavings/>
-        </DollarModal>
+        <BusinessModal title="Change Business Savings Interest Rate">
+            <SavingsModal type="business" rate={rate?.data[4]?.interest_rate} closeModal={() => setShowBusinessModal(false)}  refetch={refetch}/>
+        </BusinessModal>
+        <SafoModal title="Change SAFO Interest Rate">
+            <SavingsModal type="safo" rate={rate?.data[1]?.interest_rate} closeModal={() => setShowSafoModal(false)}  refetch={refetch}/>
+        </SafoModal>
     </Layout>
   )
 }

@@ -38,6 +38,9 @@ export const DEACTIVATE_USER = "/customer-service/admin/deactivate"
 export const ACTIVATE_USER = "/customer-service/admin/activate"
 export const GET_ALL_DEACTIVATED = "/customer-service/admin/deactivated/customers"
 
+// savings
+export const GET_SAVINGS_RATE = "/save-service/admin/save/rates"
+export const UPDATE_SAVINGS_RATE = "/save-service/admin/save/rates"
 
 
 
