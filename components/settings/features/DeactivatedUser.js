@@ -156,7 +156,7 @@ const DeactivatedUsers = () => {
         Header: "Action",
         accessor: "_id",
         Cell: (row) => (
-          <p className="text-primary fw-600" onClick={() => activateCustomer(row.value)}>Activate</p>
+          <p className="text-primary fw-600 cursor-pointer" onClick={() => activateCustomer(row.value)}>Activate</p>
         ),
       },
     ], // eslint-disable-next-line
