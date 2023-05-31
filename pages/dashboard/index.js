@@ -5,8 +5,13 @@ import UsersChart from "@/components/dashboard/UserChart";
 import RevenueLoan from "@/components/dashboard/RevenueLoan";
 import SaveSpendChart from "@/components/dashboard/SaveSpendChart";
 import Image from "next/image";
+import { useGetAnalysisQuery } from "@/services/api/routineSlice";
+import DashboardAnalyticsSkeleton from "@/components/UI/Skeleton-load/dashboardSkel";
+import { formatAsNgnMoney } from "@/components/formats/formatItem";
 
 const index = () => {
+
+  const {data, isLoading, isError} = useGetAnalysisQuery()
   return (
     <Layout>
       <div>
@@ -18,12 +23,17 @@ const index = () => {
           </select>
         </div>
         <div className="mt-10">
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-6 lg:gap-y-16">
+          {
+            isLoading && <DashboardAnalyticsSkeleton/>
+          }
+          {
+            data && (
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-6 lg:gap-y-16">
             <div className="p-8 bg-white bord-b border-purple-700 rounded-t-lg flex justify-between">
               <div className="">
                 <p className="fw-500 text-gray-500">Total Signups</p>
-                <p className="fw-600 text-xl mt-8 mb-4">₦1,000,800</p>
-                <p className="ml-8 fw-600 text-gray-500">(70)</p>
+                <p className="fw-600 text-xl mt-8 mb-4">{data?.data?.authServiceAnalytics?.customer_counts}</p>
+                <p className="ml-8 fw-600 text-gray-500">(0)</p>
               </div>
               <div className="">
                 <Image
@@ -38,8 +48,8 @@ const index = () => {
             <div className="p-8 bg-white bord-b border-orange-300 rounded-t-lg flex justify-between">
               <div className="w-6/12">
               <p className="fw-500 text-gray-500">Total Funds Received</p>
-              <p className="fw-600 text-xl mt-8 mb-4">₦1,000,800</p>
-              <p className="ml-8 fw-600 text-gray-500">(70)</p>
+              <p className="fw-600 text-xl mt-8 mb-4">{formatAsNgnMoney(data?.data?.authServiceAnalytics?.customers_transaction_inflow_sum)}</p>
+              <p className="ml-8 fw-600 text-gray-500">(0)</p>
               </div>
               <div className="">
                 <Image
@@ -54,8 +64,8 @@ const index = () => {
             <div className="p-8 bg-white bord-b border-green-500 rounded-t-lg flex justify-between">
               <div className="w-6/12">
               <p className="fw-500 text-gray-500">Total Wallet Balance</p>
-              <p className="fw-600 text-xl mt-8 mb-4">₦1,000,800</p>
-              <p className="ml-8 fw-600 text-gray-500">(70)</p>
+              <p className="fw-600 text-xl mt-8 mb-4">{formatAsNgnMoney(data?.data?.authServiceAnalytics?.customers_wallet_sum)}</p>
+              <p className="ml-8 fw-600 text-gray-500">(0)</p>
               </div>
               <div className="">
                 <Image
@@ -102,8 +112,8 @@ const index = () => {
             <div className="p-8 bg-white bord-b border-orange-300 rounded-t-lg flex justify-between">
               <div className="w-6/12">
               <p className="fw-500 text-gray-500">Total Spend</p>
-              <p className="fw-600 text-xl mt-8 mb-4">₦1,000,800</p>
-              <p className="ml-8 fw-600 text-gray-500">(70)</p>
+              <p className="fw-600 text-xl mt-8 mb-4">{formatAsNgnMoney(data?.data?.authServiceAnalytics?.customers_transaction_outflow_sum)}</p>
+              <p className="ml-8 fw-600 text-gray-500">({data?.data?.spendServiceAnalytics?.spends_count})</p>
               </div>
               <div className="">
                 <Image
@@ -118,7 +128,7 @@ const index = () => {
             <div className="p-8 pr-4 bg-white bord-b border-green-500 rounded-t-lg flex justify-between">
               <div className="w-7/12">
               <p className="fw-500 text-gray-500">Total Withdrawals</p>
-              <p className="fw-600 text-xl mt-8 mb-4">₦1,000,800</p>
+              <p className="fw-600 text-xl mt-8 mb-4">{formatAsNgnMoney(data?.data?.authServiceAnalytics?.customers_transaction_outflow_sum)}</p>
               <p className="ml-8 fw-600 text-gray-500">(70)</p>
               </div>
               <div className="">
@@ -148,6 +158,8 @@ const index = () => {
               </div>
             </div>
           </div>
+            )
+          }
         </div>
         <div className="mt-16 w-full overflow-hidden grid md:grid-cols-2 lg:grid-cols-4 gap-x-10">
           <div className="bg-white md:col-span-2 p-8 rounded">

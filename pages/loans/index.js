@@ -8,13 +8,34 @@ import LoanFeesChart from '@/components/loan/charts/LoanFees';
 import LoanInterestChart from '@/components/loan/charts/LoanInterest';
 import LoanInsuranceTable from '@/components/loan/tables/LoanInsurance';
 import LoanRepayTable from '@/components/loan/tables/LoanRepay';
+import Image from 'next/image';
+import useModal from '@/hooks/useModal';
+import SaladInterest from '@/components/loan/modals/SaladInterest';
 
 const LoanPage = () => {
+
+    const {Modal, setShowModal, showModal,} = useModal()
+    const {Modal:KollectModal, setShowModal: setShowKollectModal, showModal: showKollectModal} = useModal()
+
   return (
     <Layout>
         <div>
             <div>
-                <div className='text-3xl fw-600'>SALAD Loans</div>
+                <div className='flex items-center justify-between'>
+                    <div className='text-3xl fw-600'>SALAD Loans</div>
+                    <div className='pr-12'>
+                        <div className='cursor-pointer' onClick={() => setShowModal(true)}>
+                            <Image
+                                src='https://res.cloudinary.com/greenmouse-tech/image/upload/v1685548867/Stash/rate_l1cpu6.png'
+                                alt='rate'
+                                className='w-10 h-10 mx-auto'
+                                width={100}
+                                height={100}
+                                />
+                            <p className='fw-600 text-primary'>3.5% yearly</p>
+                        </div>
+                    </div>
+                </div>
                 <div className='lg:grid grid-cols-2 gap-x-12 mt-12'>
                     <div className='p-8 pl-0 bg-white shade rounded-md'>
                         <div className='pl-8 flex items-center justify-between'>
@@ -69,7 +90,21 @@ const LoanPage = () => {
                 </div>
             </div>
             <div className='mt-16'>
-                <div className='text-3xl fw-600'>KOLLECT Loans</div>
+                <div className='flex items-center justify-between'>
+                    <div className='text-3xl fw-600'>KOLLECT Loans</div>
+                    <div className='pr-12'>
+                        <div className='cursor-pointer' onClick={() => setShowKollectModal(true)}>
+                            <Image
+                                src='https://res.cloudinary.com/greenmouse-tech/image/upload/v1685548867/Stash/rate_l1cpu6.png'
+                                alt='rate'
+                                className='w-10 h-10 mx-auto'
+                                width={100}
+                                height={100}
+                                />
+                            <p className='fw-600 text-primary'>3.3% yearly</p>
+                        </div>
+                    </div>
+                </div>
                 <div className='lg:grid grid-cols-2 gap-x-12 mt-12'>
                     <div className='p-8 pl-0 bg-white shade rounded-md'>
                         <div className='pl-8 flex items-center justify-between'>
@@ -147,6 +182,12 @@ const LoanPage = () => {
                     <LoanRepayTable/>
                 </div>
             </div>
+            <Modal title='Change Salad Loan Interest Rate'>
+                <SaladInterest/>
+            </Modal>
+            <KollectModal title='Change Kollect Loan Interest Rate'>
+                <SaladInterest/>
+            </KollectModal>
         </div>
     </Layout>
   )

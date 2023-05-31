@@ -130,6 +130,15 @@ export const routineApiSlice = apiSlice.injectEndpoints({
       }),
       keepUnusedDataFor: ENDPOINT.CACHE_LIFETIME.DEFAULT,
     }),
+
+    getAnalysis: builder.query({
+      query: () => ({
+        url: `${ENDPOINT.GET_ANALYSIS}`,
+        method: ENDPOINT.HTTP_METHODS.GET,
+      }),
+      keepUnusedDataFor: ENDPOINT.CACHE_LIFETIME.EXTENDED,
+    }),
+
   }),
   overrideExisting: true,
 });
@@ -149,5 +158,6 @@ export const {
   useLazyDeactvateCustomerQuery,
   useGetDeactivatedQuery,
   useGetRestrictedQuery,
-  useGetFlaggedQuery
+  useGetFlaggedQuery,
+  useGetAnalysisQuery
 } = routineApiSlice;
