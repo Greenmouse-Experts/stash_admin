@@ -31,3 +31,10 @@ export const FormatStatus =  {
     "documentation": <p className="fw-500 py-1 fs-500">Documentation</p>,
     "fraud": <p className="fw-500 py-1 fs-500">Fraud</p>
   }
+
+  export const formatAsNgnMoney = (value) => {
+    if (!value) return "";
+    return `₦${value
+      .toLocaleString("en-US")
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+  };

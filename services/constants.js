@@ -47,3 +47,4 @@ export const UPDATE_SAVINGS_RATE = "/save-service/admin/save/rates"
 
 // routine urls
 export const UPLOAD_IMAGE = "/upload";
+export const GET_ANALYSIS = "/admin-service/admin/analytics"

@@ -21,6 +21,7 @@ import {
 } from "@/services/api/routineSlice";
 import { checkArray, encryptPayload } from "@/services/helpers";
 import { toast } from "react-toastify";
+import { Initials } from "@/components/UI/tableInitials";
 
 const Details = ({ data, refetch }) => {
   const [open, setOpen] = useState(1);
@@ -124,17 +125,22 @@ const Details = ({ data, refetch }) => {
     <div>
       <div className="md:flex items-center justify-between">
         <div className="flex items-center">
-          <Image
+          {
+            data.image && <Image
             src={
               data.image
-                ? data.image
-                : "https://res.cloudinary.com/greenmouse-tech/image/upload/v1680003695/Stash/profile_rl7x7s.jpg"
             }
             alt="banner"
             width={200}
             height={100}
             className="w-28 h-28 circle"
           />
+          }
+          { !data.image && <Initials
+                firstName={data.first_name}
+                lastName={data.last_name}
+                big
+              />}
           <div className="ml-6">
             <p className="text-2xl fw-500">
               {data.first_name} {data.last_name}
