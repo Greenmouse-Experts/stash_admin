@@ -10,8 +10,9 @@ import DashboardAnalyticsSkeleton from "@/components/UI/Skeleton-load/dashboardS
 import { formatAsNgnMoney } from "@/components/formats/formatItem";
 
 const index = () => {
+ // eslint-disable-next-line
+  const {data, isLoading, isError} = useGetAnalysisQuery();
 
-  const {data, isLoading, isError} = useGetAnalysisQuery()
   return (
     <Layout>
       <div>
