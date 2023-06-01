@@ -32,7 +32,7 @@ const LoanPage = () => {
                                 width={100}
                                 height={100}
                                 />
-                            <p className='fw-600 text-primary'>3.5% yearly</p>
+                            <p className='fw-600 text-primary'>3.5% monthly</p>
                         </div>
                     </div>
                 </div>
@@ -101,7 +101,7 @@ const LoanPage = () => {
                                 width={100}
                                 height={100}
                                 />
-                            <p className='fw-600 text-primary'>3.3% yearly</p>
+                            <p className='fw-600 text-primary'>3.3% monthly</p>
                         </div>
                     </div>
                 </div>

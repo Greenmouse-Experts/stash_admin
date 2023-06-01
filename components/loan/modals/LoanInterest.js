@@ -54,7 +54,7 @@ const LoanInterest = ({ type, closeModal }) => {
           <input
             type="text"
             className="w-full p-2 border border-gray-400 rounded mt-2"
-            value={`3.5% per annum`}
+            value={`3.5% per month`}
           />
         </div>
         <div className="mt-4">
