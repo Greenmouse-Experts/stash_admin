@@ -42,7 +42,8 @@ export const GET_ALL_DEACTIVATED = "/customer-service/admin/deactivated/customer
 export const GET_SAVINGS_RATE = "/save-service/admin/save/rates"
 export const UPDATE_SAVINGS_RATE = "/save-service/admin/save/rates"
 
-
+// loans
+export const UPDATE_LOAN_RATE = "/loan-service/admin/plan/update"
 
 
 // routine urls

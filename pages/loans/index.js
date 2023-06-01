@@ -10,7 +10,7 @@ import LoanInsuranceTable from '@/components/loan/tables/LoanInsurance';
 import LoanRepayTable from '@/components/loan/tables/LoanRepay';
 import Image from 'next/image';
 import useModal from '@/hooks/useModal';
-import SaladInterest from '@/components/loan/modals/SaladInterest';
+import LoanInterest from '@/components/loan/modals/LoanInterest';
 
 const LoanPage = () => {
 
@@ -183,10 +183,10 @@ const LoanPage = () => {
                 </div>
             </div>
             <Modal title='Change Salad Loan Interest Rate'>
-                <SaladInterest/>
+                <LoanInterest closeModal={() => setShowModal(false)} type="salad"/>
             </Modal>
             <KollectModal title='Change Kollect Loan Interest Rate'>
-                <SaladInterest/>
+                <LoanInterest closeModal={() => setShowKollectModal(false)} type="kollect"/>
             </KollectModal>
         </div>
     </Layout>
