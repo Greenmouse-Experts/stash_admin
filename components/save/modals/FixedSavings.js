@@ -66,7 +66,7 @@ const FixedSavings = ({ type, rate, rate2, closeModal, refetch }) => {
                 rules={{
                   required: {
                     value: true,
-                    message: "Please enter your email",
+                    message: "Please enter interest rate",
                   },
                 }}
                 render={({ field }) => (
@@ -88,7 +88,7 @@ const FixedSavings = ({ type, rate, rate2, closeModal, refetch }) => {
                 rules={{
                   required: {
                     value: true,
-                    message: "Please enter your email",
+                    message: "Please enter interest rate",
                   },
                 }}
                 render={({ field }) => (

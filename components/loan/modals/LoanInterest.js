@@ -1,13 +1,14 @@
 import React, { useState } from "react";
-import { useLazyUpdateSavingsRateQuery } from "@/services/api/saveSlice";
-import { Controller, useForm } from "react-hook-form";
-import { InputType, TextInput } from "@/components/UI/textInput";
 import { Button } from "@/components/UI/button";
+import { InputType, TextInput } from "@/components/UI/textInput";
+import { useLazyUpdateLoanRateQuery } from "@/services/api/loanSlice";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import { FormatLoanType } from "@/components/formats/formatItem";
 import { HashSpinner } from "@/components/UI/spinners";
 import { encryptPayload } from "@/services/helpers";
-import { toast } from "react-toastify";
 
-const SavingsModal = ({ type,rate, closeModal, refetch }) => {
+const LoanInterest = ({ type, closeModal }) => {
   const [isBusy, setIsBusy] = useState(false);
   const {
     control,
@@ -17,21 +18,22 @@ const SavingsModal = ({ type,rate, closeModal, refetch }) => {
   } = useForm({
     mode: "onChange",
     defaultValues: {
-      interest: "",
+      interest_rate: "",
     },
   });
-  const [update] = useLazyUpdateSavingsRateQuery();
+  const [update] = useLazyUpdateLoanRateQuery();
 
   const onSubmit = async (data) => {
     setIsBusy(true);
     let payload = encryptPayload(data);
-    await update({ type, payload })
+    const id = FormatLoanType[type];
+    await update({ id, payload })
       .then((res) => {
         if (res.isSuccess) {
           toast.success(res.data.msg);
           setIsBusy(false);
-          closeModal()
-          refetch()
+          closeModal();
+          // refetch();
         }
 
         if (res.isError) {
@@ -44,7 +46,6 @@ const SavingsModal = ({ type,rate, closeModal, refetch }) => {
         setIsBusy(false);
       });
   };
-
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -53,28 +54,28 @@ const SavingsModal = ({ type,rate, closeModal, refetch }) => {
           <input
             type="text"
             className="w-full p-2 border border-gray-400 rounded mt-2"
-            value={`${rate}% per annum`}
+            value={`3.5% per annum`}
           />
         </div>
         <div className="mt-4">
           <Controller
-            name="interest"
+            name="interest_rate"
             control={control}
             rules={{
               required: {
                 value: true,
-                message: "Please enter interest rate",
+                message: "Please enter your email",
               },
             }}
             render={({ field }) => (
               <TextInput
-              label="To"
+                label="To"
                 placeholder=""
-                error={errors.interest?.message}
+                error={errors.interest_rate?.message}
                 type={InputType.text}
-                        labelClassName="fw-500 lg:fs-700 text-gray-500"
-                        altClassName="bg-white w-full p-2 outline-none lg:px-3 rounded"
-                        divClassName="bg-white flex items-center  border border-gray-400 mt-2 rounded"
+                labelClassName="fw-500 lg:fs-700 text-gray-500"
+                altClassName="bg-white w-full p-2 outline-none lg:px-3 rounded"
+                divClassName="bg-white flex items-center  border border-gray-400 mt-2 rounded"
                 {...field}
               />
             )}
@@ -83,7 +84,11 @@ const SavingsModal = ({ type,rate, closeModal, refetch }) => {
         <div className="text-end mt-8">
           <Button
             title={
-              isBusy ? <HashSpinner size={25} color="white" /> : "Save Change"
+              isBusy ? (
+                <HashSpinner size={25} color="white" />
+              ) : (
+                "Change interest rate"
+              )
             }
             disabled={!isValid}
           />
@@ -93,4 +98,4 @@ const SavingsModal = ({ type,rate, closeModal, refetch }) => {
   );
 };
 
-export default SavingsModal;
+export default LoanInterest;

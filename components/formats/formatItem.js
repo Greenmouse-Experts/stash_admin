@@ -38,3 +38,8 @@ export const FormatStatus =  {
       .toLocaleString("en-US")
       .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
   };
+
+  export const FormatLoanType = {
+    "salad": "64775cb007185fff1c5e2e99",
+    "kollect": "647632fb5c09f9b87f624e6c"
+  }
