@@ -11,9 +11,12 @@ import LoanRepayTable from '@/components/loan/tables/LoanRepay';
 import Image from 'next/image';
 import useModal from '@/hooks/useModal';
 import LoanInterest from '@/components/loan/modals/LoanInterest';
+import { useGetKollectRateQuery, useGetSaladRateQuery } from '@/services/api/loanSlice';
 
 const LoanPage = () => {
 
+    const {data:salad, isLoading:saladLoading, refetch:refetchSalad } = useGetSaladRateQuery()
+    const {data:kollect, isLoading:kollectLoading, refetch:refetchKollect} = useGetKollectRateQuery()
     const {Modal, setShowModal, showModal,} = useModal()
     const {Modal:KollectModal, setShowModal: setShowKollectModal, showModal: showKollectModal} = useModal()
 
@@ -32,7 +35,7 @@ const LoanPage = () => {
                                 width={100}
                                 height={100}
                                 />
-                            <p className='fw-600 text-primary'>3.5% yearly</p>
+                            <p className='fw-600 text-primary'>{salad && `${salad.data.interest_rate}%`} monthly</p>
                         </div>
                     </div>
                 </div>
@@ -101,7 +104,7 @@ const LoanPage = () => {
                                 width={100}
                                 height={100}
                                 />
-                            <p className='fw-600 text-primary'>3.3% yearly</p>
+                            <p className='fw-600 text-primary'>{kollect && `${kollect.data.interest_rate}%`} monthly</p>
                         </div>
                     </div>
                 </div>
@@ -183,10 +186,10 @@ const LoanPage = () => {
                 </div>
             </div>
             <Modal title='Change Salad Loan Interest Rate'>
-                <LoanInterest closeModal={() => setShowModal(false)} type="salad"/>
+                <LoanInterest closeModal={() => setShowModal(false)} type="SALAD" refetch={refetchSalad} rate={salad?.data?.interest_rate}/>
             </Modal>
             <KollectModal title='Change Kollect Loan Interest Rate'>
-                <LoanInterest closeModal={() => setShowKollectModal(false)} type="kollect"/>
+                <LoanInterest closeModal={() => setShowKollectModal(false)} type="KOLLECT" refetch={refetchKollect} rate={kollect?.data?.interest_rate}/>
             </KollectModal>
         </div>
     </Layout>

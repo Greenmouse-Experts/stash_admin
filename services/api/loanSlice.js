@@ -7,20 +7,31 @@ import { requestAuthorization } from "../helpers";
 export const loanApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
 
-    getSavingsRate: builder.query({
+    getSaladRate: builder.query({
       query: () => ({
-        url: `${ENDPOINT.GET_SAVINGS_RATE}`,
+        url: `${ENDPOINT.GET_SALAD_RATE}`,
         method: ENDPOINT.HTTP_METHODS.GET,
         headers: {
             Authorization: requestAuthorization(),
           },
       }),
-      keepUnusedDataFor: ENDPOINT.CACHE_LIFETIME.TINY,
+      keepUnusedDataFor: ENDPOINT.CACHE_LIFETIME.EXTENDED,
+    }),
+
+    getKollectRate: builder.query({
+      query: () => ({
+        url: `${ENDPOINT.GET_KOLLECT_RATE}`,
+        method: ENDPOINT.HTTP_METHODS.GET,
+        headers: {
+            Authorization: requestAuthorization(),
+          },
+      }),
+      keepUnusedDataFor: ENDPOINT.CACHE_LIFETIME.EXTENDED,
     }),
 
     updateLoanRate: builder.query({
-      query: ({id, payload}) => ({
-        url: `${ENDPOINT.UPDATE_LOAN_RATE}/${id}`,
+      query: ({type, payload}) => ({
+        url: `${ENDPOINT.UPDATE_LOAN_RATE}/${type}`,
         method: ENDPOINT.HTTP_METHODS.PUT,
         body: {
             message: payload,
@@ -33,6 +44,7 @@ export const loanApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
-    useGetSavingsRateQuery,
+    useGetSaladRateQuery,
+    useGetKollectRateQuery,
     useLazyUpdateLoanRateQuery
 } = loanApiSlice

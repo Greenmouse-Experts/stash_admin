@@ -43,6 +43,8 @@ export const GET_SAVINGS_RATE = "/save-service/admin/save/rates"
 export const UPDATE_SAVINGS_RATE = "/save-service/admin/save/rates"
 
 // loans
+export const GET_SALAD_RATE = "/loan-service/admin/plan/view/SALAD"
+export const GET_KOLLECT_RATE = "/loan-service/admin/plan/view/KOLLECT"
 export const UPDATE_LOAN_RATE = "/loan-service/admin/plan/update"
 
 
