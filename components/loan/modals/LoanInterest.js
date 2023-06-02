@@ -4,11 +4,10 @@ import { InputType, TextInput } from "@/components/UI/textInput";
 import { useLazyUpdateLoanRateQuery } from "@/services/api/loanSlice";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { FormatLoanType } from "@/components/formats/formatItem";
 import { HashSpinner } from "@/components/UI/spinners";
 import { encryptPayload } from "@/services/helpers";
 
-const LoanInterest = ({ type, closeModal }) => {
+const LoanInterest = ({ type, closeModal, refetch, rate }) => {
   const [isBusy, setIsBusy] = useState(false);
   const {
     control,
@@ -26,14 +25,13 @@ const LoanInterest = ({ type, closeModal }) => {
   const onSubmit = async (data) => {
     setIsBusy(true);
     let payload = encryptPayload(data);
-    const id = FormatLoanType[type];
-    await update({ id, payload })
+    await update({ type, payload })
       .then((res) => {
         if (res.isSuccess) {
           toast.success(res.data.msg);
           setIsBusy(false);
           closeModal();
-          // refetch();
+          refetch();
         }
 
         if (res.isError) {
@@ -54,7 +52,7 @@ const LoanInterest = ({ type, closeModal }) => {
           <input
             type="text"
             className="w-full p-2 border border-gray-400 rounded mt-2"
-            value={`3.5% per month`}
+            value={`${rate}% per month`}
           />
         </div>
         <div className="mt-4">
@@ -64,7 +62,7 @@ const LoanInterest = ({ type, closeModal }) => {
             rules={{
               required: {
                 value: true,
-                message: "Please enter your email",
+                message: "Please enter interest rate",
               },
             }}
             render={({ field }) => (
