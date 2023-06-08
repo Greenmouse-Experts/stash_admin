@@ -281,7 +281,7 @@ const ProfileInfo = ({data, refetch}) => {
               <input
                 type="text"
                 className="p-3 rounded border mt-2 border-gray-400 w-full"
-                value="Mastercard"
+                value={data?.card[0]?.card_type}
               />
             </div>
             <div className="mt-8">
@@ -331,7 +331,7 @@ const ProfileInfo = ({data, refetch}) => {
               <input
                 type="email"
                 className="p-3 rounded border mt-2 border-gray-400 w-full"
-                value="4326 *** *** 2869"
+                value={`${(data?.card[0]?.card_number).slice(0,4)} **** **** ${(data?.card[0]?.card_number).slice(12,16)}`}
               />
             </div>
           </div>
