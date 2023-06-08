@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import {
   Menu,
@@ -11,11 +11,23 @@ import useModal from "@/hooks/useModal";
 import ReusableModal from "@/components/helpers/ReusableModal";
 import { toast } from "react-toastify";
 import ReviewModal from "../modals/ReviewModal";
+import {
+  FormatStatus,
+  formatAsNgnMoney,
+  formatDate,
+} from "@/components/formats/formatItem";
+import Table from "@/components/UI/table";
+import { PreLoader } from "@/components/UI/spinners";
+import { useGetAllLoansQuery } from "@/services/api/loanSlice";
+import Link from "next/link";
+import Image from "next/image";
+import { Initials } from "@/components/UI/tableInitials";
 
 const LoanInsuranceTable = () => {
+  const { data: loans, isLoading: isBusy } = useGetAllLoansQuery();
   const { Modal, setShowModal } = useModal();
   const { Modal: DeclineModal, setShowModal: setShowDeclineModal } = useModal();
-  const { Modal:AcceptModal, setShowModal: setShowAcceptModal } = useModal();
+  const { Modal: AcceptModal, setShowModal: setShowAcceptModal } = useModal();
   const [val, setVal] = useState();
 
   const acceptOption = (value) => {
@@ -35,532 +47,140 @@ const LoanInsuranceTable = () => {
     setShowDeclineModal(false);
   };
 
+  const columns = useMemo(
+    () => [
+      {
+        Header: "S/N",
+        accessor: (row, index) => index + 1, //RDT provides index by default
+      },
+      {
+        Header: "Name",
+        accessor: "user.first_name",
+        Cell: (row) => (
+          <Link
+            href={{
+              pathname: `/customers/${row?.row.original.user_id}`,
+              query: {
+                sort: row?.row.original.user_id,
+              },
+            }}
+            className="flex items-center gap-x-2"
+          >
+            {row?.row.original.user.image ? (
+              <Image
+                src={row?.row.original.user.image}
+                alt="profile"
+                width={100}
+                height={100}
+                className=" w-7 h-7 circle"
+              />
+            ) : (
+              <Initials
+                firstName={row.value}
+                lastName={row?.row.original.user.last_name}
+              />
+            )}
+            <p className="cursor-pointer">
+              {row.value} {row?.row.original.user.last_name}
+            </p>
+          </Link>
+        ),
+      },
+      {
+        Header: "Email",
+        accessor: "user.email",
+      },
+      {
+        Header: "Type",
+        accessor: "type",
+      },
+      {
+        Header: "Amount Requested",
+        accessor: "loan.amount",
+        Cell: (props) => formatAsNgnMoney(props.value),
+      },
+      {
+        Header: "Document",
+        accessor: "document.recent_payslip",
+        Cell: (row) => (
+          <Link
+            href={{
+              pathname: `/loans/${row?.row.original.user_id}`,
+              query: {
+                sort: row?.value,
+              },
+            }}
+            className="text-primary underline fw-600"
+          >
+            View
+          </Link>
+        ),
+      },
+      {
+        Header: "Status",
+        accessor: "status",
+        Cell: (props) => FormatStatus[props.value],
+      },
+      {
+        Header: "Amount Approved",
+        accessor: "",
+        Cell: (props) => formatAsNgnMoney[props.value],
+      },
+      {
+        Header: "Date",
+        accessor: "createdAt",
+        Cell: (props) => formatDate(props.value),
+      },
+      {
+        Header: "Action",
+        accessor: "_id",
+        Cell: (row) => (
+          <Menu>
+            <MenuHandler>
+              <Button className="bg-transparent px-0 mx-0 hover:shadow-none text-md flex items-center font-normal shadow-none text-black capitalize">
+                <BsThreeDotsVertical className="text-xl" />
+              </Button>
+            </MenuHandler>
+            <MenuList>
+              <MenuItem
+                onClick={() => acceptOption("user loan has been accepted")}
+              >
+                Accept
+              </MenuItem>
+              <MenuItem
+                onClick={() => declineOption("user loan has been declined")}
+              >
+                Decline
+              </MenuItem>
+              <MenuItem onClick={() => setShowModal(true)}>Review</MenuItem>
+            </MenuList>
+          </Menu>
+        ),
+      },
+    ], // eslint-disable-next-line
+    []
+  );
+
+  const list = useMemo(() => loans?.data, [loans?.data]);
+
   return (
-    <div className="overflow-x-scroll mt-8">
-      <table className="min-w-full text-left">
-        <thead className="font-medium">
-          <tr>
-            <th
-              scope="col"
-              className="px-4 text-gray-400 align-middle py-3 whitespace-nowrap text-left"
-            >
-              S/N
-            </th>
-            <th
-              scope="col"
-              className="px-4 text-gray-400 align-middle py-3 whitespace-nowrap text-left"
-            >
-              Name
-            </th>
-            <th
-              scope="col"
-              className="px-4 text-gray-400 align-middle py-3 whitespace-nowrap text-left"
-            >
-              Email
-            </th>
-            <th
-              scope="col"
-              className="px-4 text-gray-400 align-middle py-3 whitespace-nowrap text-left"
-            >
-              Type
-            </th>
-            <th
-              scope="col"
-              className="px-4 text-gray-400 align-middle py-3 whitespace-nowrap text-left"
-            >
-              Amount requested
-            </th>
-            <th
-              scope="col"
-              className="px-4 text-gray-400 align-middle py-3 whitespace-nowrap text-left"
-            >
-              Document
-            </th>
-            <th
-              scope="col"
-              className="px-4 text-gray-400 align-middle py-3 whitespace-nowrap text-left"
-            >
-              Status
-            </th>
-            <th
-              scope="col"
-              className="px-4 text-gray-400 align-middle py-3 whitespace-nowrap text-left"
-            >
-              Amount approved
-            </th>
-            <th
-              scope="col"
-              className="px-4 text-gray-400 align-middle py-3 whitespace-nowrap text-left"
-            >
-              Date
-            </th>
-            <th
-              scope="col"
-              className="px-4 text-gray-400 align-middle py-3 whitespace-nowrap text-left"
-            >
-              Action
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr className="font-medium">
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              1
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              Odinchazoihe Kayode
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              Odinchazoihekayode@gmail.com
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              KOLLECT
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              100,000,000
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              <p className="text-primary underline fw-600">View</p>
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              <p className="px-3 py-1 rounded bg-green-50 text-green-600 border border-green-500">
-                Approved
-              </p>
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              4,000,200
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              Mar 02, 23 - 9:22
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-center">
-              <Menu>
-                <MenuHandler>
-                  <Button className="bg-transparent px-0 mx-0 hover:shadow-none text-md flex items-center font-normal shadow-none text-black capitalize">
-                    <BsThreeDotsVertical className="text-xl" />
-                  </Button>
-                </MenuHandler>
-                <MenuList>
-                  <MenuItem
-                    onClick={() => acceptOption("user loan has been accepted")}
-                  >
-                    Accept
-                  </MenuItem>
-                  <MenuItem onClick={() => declineOption("user loan has been declined")}>Decline</MenuItem>
-                  <MenuItem onClick={() => setShowModal(true)}>Review</MenuItem>
-                </MenuList>
-              </Menu>
-            </td>
-          </tr>
-          <tr className="font-medium">
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              2
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              Odinchazoihe Kayode
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              Odinchazoihekayode@gmail.com
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              SALAD
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              100,000,000
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              <p className="text-primary underline fw-600">View</p>
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              <p className="w-24 fs-500 rounded fw-500 text-center border border-yellow-800 text-yellow-800 py-1">
-                Pending
-              </p>
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              4,000,200
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              Mar 02, 23 - 9:22
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-center">
-              <Menu>
-                <MenuHandler>
-                  <Button className="bg-transparent px-0 mx-0 hover:shadow-none text-md flex items-center font-normal shadow-none text-black capitalize">
-                    <BsThreeDotsVertical className="text-xl" />
-                  </Button>
-                </MenuHandler>
-                <MenuList>
-                  <MenuItem>Accept</MenuItem>
-                  <MenuItem>Decline</MenuItem>
-                  <MenuItem>Review</MenuItem>
-                </MenuList>
-              </Menu>
-            </td>
-          </tr>
-          <tr className="font-medium">
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              3
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              Odinchazoihe Kayode
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              Odinchazoihekayode@gmail.com
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              SALAD
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              100,000,000
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              <p className="text-primary underline fw-600">View</p>
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              <p className="px-3 py-1 rounded bg-red-50 text-red-600 border border-red-500">
-                Declined
-              </p>
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              4,000,200
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              Mar 02, 23 - 9:22
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-center">
-              <Menu>
-                <MenuHandler>
-                  <Button className="bg-transparent px-0 mx-0 hover:shadow-none text-md flex items-center font-normal shadow-none text-black capitalize">
-                    <BsThreeDotsVertical className="text-xl" />
-                  </Button>
-                </MenuHandler>
-                <MenuList>
-                  <MenuItem>Accept</MenuItem>
-                  <MenuItem>Decline</MenuItem>
-                  <MenuItem>Review</MenuItem>
-                </MenuList>
-              </Menu>
-            </td>
-          </tr>
-          <tr className="font-medium">
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              4
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              Odinchazoihe Kayode
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              Odinchazoihekayode@gmail.com
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              KOLLECT
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              100,000,000
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              <p className="text-primary underline fw-600">View</p>
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              <p className="px-3 py-1 rounded bg-yellow-50 text-yellow-600 border border-yellow-500">
-                Pending
-              </p>
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              4,000,200
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              Mar 02, 23 - 9:22
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-center">
-              <Menu>
-                <MenuHandler>
-                  <Button className="bg-transparent px-0 mx-0 hover:shadow-none text-md flex items-center font-normal shadow-none text-black capitalize">
-                    <BsThreeDotsVertical className="text-xl" />
-                  </Button>
-                </MenuHandler>
-                <MenuList>
-                  <MenuItem>Accept</MenuItem>
-                  <MenuItem>Decline</MenuItem>
-                  <MenuItem>Review</MenuItem>
-                </MenuList>
-              </Menu>
-            </td>
-          </tr>
-          <tr className="font-medium">
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              5
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              Odinchazoihe Kayode
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              Odinchazoihekayode@gmail.com
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              KOLLECT
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              100,000,000
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              <p className="text-primary underline fw-600">View</p>
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              <p className="px-3 py-1 rounded bg-green-50 text-green-600 border border-green-500">
-                Approved
-              </p>
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              4,000,200
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              Mar 02, 23 - 9:22
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-center">
-              <Menu>
-                <MenuHandler>
-                  <Button className="bg-transparent px-0 mx-0 hover:shadow-none text-md flex items-center font-normal shadow-none text-black capitalize">
-                    <BsThreeDotsVertical className="text-xl" />
-                  </Button>
-                </MenuHandler>
-                <MenuList>
-                  <MenuItem>Accept</MenuItem>
-                  <MenuItem>Decline</MenuItem>
-                  <MenuItem>Review</MenuItem>
-                </MenuList>
-              </Menu>
-            </td>
-          </tr>
-          <tr className="font-medium">
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              6
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              Odinchazoihe Kayode
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              Odinchazoihekayode@gmail.com
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              KOLLECT
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              100,000,000
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              <p className="text-primary underline fw-600">View</p>
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              <p className="px-3 py-1 rounded bg-green-50 text-green-600 border border-green-500">
-                Approved
-              </p>
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              4,000,200
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              Mar 02, 23 - 9:22
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-center">
-              <Menu>
-                <MenuHandler>
-                  <Button className="bg-transparent px-0 mx-0 hover:shadow-none text-md flex items-center font-normal shadow-none text-black capitalize">
-                    <BsThreeDotsVertical className="text-xl" />
-                  </Button>
-                </MenuHandler>
-                <MenuList>
-                  <MenuItem>Accept</MenuItem>
-                  <MenuItem>Decline</MenuItem>
-                  <MenuItem>Review</MenuItem>
-                </MenuList>
-              </Menu>
-            </td>
-          </tr>
-          <tr className="font-medium">
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              7
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              Odinchazoihe Kayode
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              Odinchazoihekayode@gmail.com
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              SALAD
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              100,000,000
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              <p className="text-primary underline fw-600">View</p>
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              <p className="px-3 py-1 rounded bg-green-50 text-green-600 border border-green-500">
-                Approved
-              </p>
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              4,000,200
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              Mar 02, 23 - 9:22
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-center">
-              <Menu>
-                <MenuHandler>
-                  <Button className="bg-transparent px-0 mx-0 hover:shadow-none text-md flex items-center font-normal shadow-none text-black capitalize">
-                    <BsThreeDotsVertical className="text-xl" />
-                  </Button>
-                </MenuHandler>
-                <MenuList>
-                  <MenuItem>Accept</MenuItem>
-                  <MenuItem>Decline</MenuItem>
-                  <MenuItem>Review</MenuItem>
-                </MenuList>
-              </Menu>
-            </td>
-          </tr>
-          <tr className="font-medium">
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              8
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              Odinchazoihe Kayode
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              Odinchazoihekayode@gmail.com
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              SALAD
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              100,000,000
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              <p className="text-primary underline fw-600">View</p>
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              <p className="px-3 py-1 rounded bg-red-50 text-red-600 border border-red-500">
-                Declined
-              </p>
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              4,000,200
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              Mar 02, 23 - 9:22
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-center">
-              <Menu>
-                <MenuHandler>
-                  <Button className="bg-transparent px-0 mx-0 hover:shadow-none text-md flex items-center font-normal shadow-none text-black capitalize">
-                    <BsThreeDotsVertical className="text-xl" />
-                  </Button>
-                </MenuHandler>
-                <MenuList>
-                  <MenuItem>Accept</MenuItem>
-                  <MenuItem>Decline</MenuItem>
-                  <MenuItem>Review</MenuItem>
-                </MenuList>
-              </Menu>
-            </td>
-          </tr>
-          <tr className="font-medium">
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              9
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              Odinchazoihe Kayode
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              Odinchazoihekayode@gmail.com
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              SALAD
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              100,000,000
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              <p className="text-primary underline fw-600">View</p>
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              <p className="px-3 py-1 rounded bg-green-50 text-green-600 border border-green-500">
-                Approved
-              </p>
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              4,000,200
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              Mar 02, 23 - 9:22
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-center">
-              <Menu>
-                <MenuHandler>
-                  <Button className="bg-transparent px-0 mx-0 hover:shadow-none text-md flex items-center font-normal shadow-none text-black capitalize">
-                    <BsThreeDotsVertical className="text-xl" />
-                  </Button>
-                </MenuHandler>
-                <MenuList>
-                  <MenuItem>Accept</MenuItem>
-                  <MenuItem>Decline</MenuItem>
-                  <MenuItem>Review</MenuItem>
-                </MenuList>
-              </Menu>
-            </td>
-          </tr>
-          <tr className="font-medium">
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              10
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              Odinchazoihe Kayode
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              Odinchazoihekayode@gmail.com
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              SALAD
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              100,000,000
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              <p className="text-primary underline fw-600">View</p>
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              <p className="px-3 py-1 rounded bg-red-50 text-red-600 border border-red-500">
-                Declined
-              </p>
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              4,000,200
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-left">
-              Mar 02, 23 - 9:22
-            </td>
-            <td className="align-middle fs-500 whitespace-nowrap px-4 py-4 text-center">
-              <Menu>
-                <MenuHandler>
-                  <Button className="bg-transparent px-0 mx-0 hover:shadow-none text-md flex items-center font-normal shadow-none text-black capitalize">
-                    <BsThreeDotsVertical className="text-xl" />
-                  </Button>
-                </MenuHandler>
-                <MenuList>
-                  <MenuItem>Accept</MenuItem>
-                  <MenuItem>Decline</MenuItem>
-                  <MenuItem>Review</MenuItem>
-                </MenuList>
-              </Menu>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div className="mt-8">
+      {isBusy && (
+        <div>
+          <PreLoader />
+        </div>
+      )}
+      {loans && (
+        <Table
+          columns={columns}
+          data={list}
+          // next={NextPage}
+          // prev={PrevPage}
+          nofilter
+        />
+      )}
       <Modal title="Review Loan">
-        <ReviewModal/>
+        <ReviewModal />
       </Modal>
       <AcceptModal title="" noHead>
         <ReusableModal

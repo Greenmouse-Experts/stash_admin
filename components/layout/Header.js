@@ -71,9 +71,9 @@ const Header = () => {
           </div>
           <div className="lg:ml-12 ml-5 flex items-center">
             <Link href="/profile">
-              {auth.photo ? (
+              {auth.photo && !isLoading ? (
                 <Image
-                  src={auth && image}
+                  src={image}
                   alt="logo"
                   width={300}
                   height={300}

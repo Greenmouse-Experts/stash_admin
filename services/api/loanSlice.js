@@ -39,6 +39,17 @@ export const loanApiSlice = apiSlice.injectEndpoints({
       }),
       keepUnusedDataFor: ENDPOINT.CACHE_LIFETIME.DEFAULT,
     }),
+
+    getAllLoans: builder.query({
+      query: () => ({
+        url: `${ENDPOINT.GET_ALL_LOANS}`,
+        method: ENDPOINT.HTTP_METHODS.GET,
+        headers: {
+            Authorization: requestAuthorization(),
+          },
+      }),
+      keepUnusedDataFor: ENDPOINT.CACHE_LIFETIME.EXTENDED,
+    }),
   }),
   overrideExisting: true,
 });
@@ -46,5 +57,6 @@ export const loanApiSlice = apiSlice.injectEndpoints({
 export const {
     useGetSaladRateQuery,
     useGetKollectRateQuery,
-    useLazyUpdateLoanRateQuery
+    useLazyUpdateLoanRateQuery,
+    useGetAllLoansQuery
 } = loanApiSlice

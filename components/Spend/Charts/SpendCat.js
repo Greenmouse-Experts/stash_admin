@@ -13,11 +13,14 @@ const SpendCatChart = () => {
         name: 'Date',
         data: [110, 320, 450, 320, 340, 320, 410, 210, 100, 200, 410, 320,]
       }, {
-        name: 'Bills',
+        name: 'Cable Tv',
         data: [110, 320, 400, 300, 300, 240, 310, 110, 100, 200, 310, 220,]
       }, {
-        name: 'Transfer',
+        name: 'Electricity',
         data: [150, 300, 400, 310, 310, 300, 390, 200, 90, 120, 120, 120,]
+      }, {
+        name: 'Internet',
+        data: [100, 200, 400, 310, 310, 300, 190, 300, 90, 120, 120, 120,]
       },
     ]
     
@@ -26,8 +29,9 @@ const SpendCatChart = () => {
           height: 300,
           type: 'area'
         },
+        colors: ['#6B5AED', '#F75555', '#4ADE8080', '#FFC423','#f6ad55'],
         fill: {
-            colors: ['#6B5AED', '#F75555', '#4ADE8080', '#FFC423',]
+            colors: ['#6B5AED', '#F75555', '#4ADE8080', '#FFC423','#f6ad55']
           },
         dataLabels: {
           enabled: false

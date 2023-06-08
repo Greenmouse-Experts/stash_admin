@@ -43,11 +43,13 @@ export const GET_CUSTOMER_SPEND = "/spend-service/admin/spends"
 export const GET_SAVINGS_RATE = "/save-service/admin/save/rates"
 export const UPDATE_SAVINGS_RATE = "/save-service/admin/save/rates"
 export const GET_CUSTOMER_GOAL_SAVING = "/save-service/admin/save/goal"
+export const Get_CUSTOMER_SAVE_ANALYTICS = "/save-service/admin/save/analytics"
 
 // loans
 export const GET_SALAD_RATE = "/loan-service/admin/plan/view/SALAD"
 export const GET_KOLLECT_RATE = "/loan-service/admin/plan/view/KOLLECT"
 export const UPDATE_LOAN_RATE = "/loan-service/admin/plan/update"
+export const GET_ALL_LOANS = "/loan-service/admin/loans"
 
 // spend
 export const GET_SPEND_ANALYTICS = "/spend-service/admin/analytics"
