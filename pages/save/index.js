@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Layout from '@/components/layout/Layout';
 import { BsDownload, BsFilter, BsThreeDotsVertical } from 'react-icons/bs';
 import Image from 'next/image';
@@ -18,7 +18,7 @@ import MainBusinChart from '@/components/save/charts/MainBusin';
 import SaversDataTable from '@/components/save/tables/SaversData';
 import WithdrawalDataTable from '@/components/save/tables/WithdrawalsData';
 import FixedSavings from '@/components/save/modals/FixedSavings';
-import { useGetSavingsRateQuery } from '@/services/api/saveSlice';
+import { useGetCustomerSaveAnalyticsQuery, useGetSavingsRateQuery } from '@/services/api/saveSlice';
 import SavingsModal from '@/components/save/modals/SavingsModal';
 
 const SavePage = () => {
@@ -50,6 +50,12 @@ const SavePage = () => {
         setModalBusy:setBusinessModalBusy } = useModal();
 
     const {isLoading, data: rate, isError, refetch} = useGetSavingsRateQuery()
+    const [year, setYear] = useState("all-time")
+    const {data:analysis, refetch:refetchAnalysis} = useGetCustomerSaveAnalyticsQuery(year)
+    const changeYearSaving = (event) => {   
+        setYear(event.target.value)
+        refetchAnalysis()
+    }
 
   return (
     <Layout>
@@ -140,7 +146,7 @@ const SavePage = () => {
                             </div>
                         </div>
                         <div className='w-full overflow-x-auto'>
-                            <TopSavers/>
+                            <TopSavers />
                         </div>
                     </div>
                 </div>
@@ -149,13 +155,16 @@ const SavePage = () => {
                 <div className='p-8 bg-white shade rounded-md'>
                     <div className='flex items-center justify-between'>
                         <p className='text-xl fw-600'>Savings</p>
-                        <select className='px-2 border border-gray-300 rounded fs-500'>
-                            <option>All Time</option>
-                            <option>Yearly</option>
+                        <select className='px-2 border border-gray-300 rounded fs-500' onChange={changeYearSaving}>
+                            <option value="all-time">All Time</option>
+                            <option value="2023">2023</option>
+                            <option value="2024">2024</option>
                         </select>
                     </div>
                     <div className='mt-8'>
-                        <SavingChart/>
+                        {
+                        analysis && <SavingChart data={analysis?.data}/>
+                        }
                     </div>
                 </div>
                 <div className='p-8 mt-8 lg:mt-0 bg-white shade rounded-md'>

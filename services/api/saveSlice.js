@@ -30,14 +30,25 @@ export const savingsApiSlice = apiSlice.injectEndpoints({
     }),
 
     getCustomerGoalSave: builder.query({
-      query: (id) => ({
-        url: `${ENDPOINT.GET_CUSTOMER_GOAL_SAVING}/${id}`,
+      query: (id, page) => ({
+        url: `${ENDPOINT.GET_CUSTOMER_GOAL_SAVING}/${id}/view`,
         method: ENDPOINT.HTTP_METHODS.GET,
         headers: {
             Authorization: requestAuthorization(),
           },
       }),
-      keepUnusedDataFor: ENDPOINT.CACHE_LIFETIME.TINY,
+      keepUnusedDataFor: ENDPOINT.CACHE_LIFETIME.EXTENDED,
+    }),
+
+    getCustomerSaveAnalytics: builder.query({
+      query: (param) => ({
+        url: `${ENDPOINT.Get_CUSTOMER_SAVE_ANALYTICS}?year=${param}`,
+        method: ENDPOINT.HTTP_METHODS.GET,
+        headers: {
+            Authorization: requestAuthorization(),
+          },
+      }),
+      keepUnusedDataFor: ENDPOINT.CACHE_LIFETIME.EXTENDED,
     }),
   }),
   overrideExisting: true,
@@ -46,5 +57,7 @@ export const savingsApiSlice = apiSlice.injectEndpoints({
 export const {
     useGetSavingsRateQuery,
     useLazyUpdateSavingsRateQuery,
-    useGetCustomerGoalSaveQuery
+    useGetCustomerGoalSaveQuery,
+    useLazyGetCustomerGoalSaveQuery,
+    useGetCustomerSaveAnalyticsQuery,
 } = savingsApiSlice

@@ -4,20 +4,20 @@ import dynamic from 'next/dynamic'
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
-const SavingChart = () => {
+const SavingChart = ({data}) => {
 
     const options = { 
-        labels: ["Goal", "Fixed","USD","SAYS", "SAYE", "Wallet"] ,
+        labels: ["Goal", "Fixed","BUSINESS","SAYS", "SAFO", "MAIN"] ,
         fill: {
             colors: ['#6B5AED', '#FFC423', '#F75555', '#4ADE8080', '#4338ca', '#7e22ce']
           },
-        colors: ['#7665F3', '#FFC423'],
+        colors: ['#6B5AED', '#FFC423', '#F75555', '#4ADE8080', '#4338ca', '#7e22ce'],
         legend: {
             show: false
          },
     
     };
-    const series = [2000, 650, 540, 230, 650,450]; //our data
+    const series = [Number(data.goal.amount), Number(data.fixed.amount), Number(data.business.amount), Number(data.says.amount), Number(data.safo.amount),Number(data.main.amount)]; //our data
 
   return (
     <div>
@@ -33,8 +33,8 @@ const SavingChart = () => {
                     <p className='pl-2 text-gray-500'>Goal</p>
                 </div>
                 <div className='flex items-center lg:fs-800'>
-                    <p className='text-gray-500'>(33)</p>
-                    <p className='ml-3 fw-600'>1,900,000</p>
+                    <p className='text-gray-500'>({Math.trunc(data.goal.count)})</p>
+                    <p className='ml-3 fw-600'>{data.goal.amount}</p>
                 </div>
             </div>
             <div className='flex mt-8 items-center justify-between'>
@@ -43,8 +43,8 @@ const SavingChart = () => {
                     <p className='pl-2 text-gray-500'>Fixed</p>
                 </div>
                 <div className='flex items-center lg:fs-800'>
-                    <p className='text-gray-500'>(30)</p>
-                    <p className='ml-3 fw-600'>1,200,000</p>
+                    <p className='text-gray-500'>({Math.trunc(data.fixed.count)})</p>
+                    <p className='ml-3 fw-600'>{data.fixed.amount}</p>
                 </div>
             </div>
             <div className='flex mt-8 items-center justify-between'>
@@ -53,8 +53,8 @@ const SavingChart = () => {
                     <p className='pl-2 text-gray-500'>Business</p>
                 </div>
                 <div className='flex items-center lg:fs-800'>
-                    <p className='text-gray-500'>(3)</p>
-                    <p className='ml-3 fw-600'>800,000</p>
+                    <p className='text-gray-500'>({Math.trunc(data.business.count)})</p>
+                    <p className='ml-3 fw-600'>{data.business.amount}</p>
                 </div>
             </div>
             <div className='flex mt-8 items-center justify-between'>
@@ -63,8 +63,8 @@ const SavingChart = () => {
                     <p className='pl-2 text-gray-500'>SAYS</p>
                 </div>
                 <div className='flex items-center lg:fs-800'>
-                    <p className='text-gray-500'>(19)</p>
-                    <p className='ml-3 fw-600'>850,000</p>
+                    <p className='text-gray-500'>({Math.trunc(data.says.count)})</p>
+                    <p className='ml-3 fw-600'>{data.says.amount}</p>
                 </div>
             </div>
             <div className='flex mt-8 items-center justify-between'>
@@ -73,8 +73,8 @@ const SavingChart = () => {
                     <p className='pl-2 text-gray-500'>SAFO</p>
                 </div>
                 <div className='flex items-center lg:fs-800'>
-                    <p className='text-gray-500'>(15)</p>
-                    <p className='ml-3 fw-600'>801,000</p>
+                    <p className='text-gray-500'>({Math.trunc(data.safo.count)})</p>
+                    <p className='ml-3 fw-600'>{data.safo.amount}</p>
                 </div>
             </div>
             <div className='flex mt-8 items-center justify-between'>
@@ -83,8 +83,8 @@ const SavingChart = () => {
                     <p className='pl-2 text-gray-500'>Main</p>
                 </div>
                 <div className='flex items-center lg:fs-800'>
-                    <p className='text-gray-500'>(15)</p>
-                    <p className='ml-3 fw-600'>801,000</p>
+                    <p className='text-gray-500'>({Math.trunc(data.main.count)})</p>
+                    <p className='ml-3 fw-600'>{data.main.amount}</p>
                 </div>
             </div>
             <div className='flex mt-8 items-center justify-between'>
@@ -92,8 +92,8 @@ const SavingChart = () => {
                     <p className='pl-2 fw-600'>Total</p>
                 </div>
                 <div className='flex items-center lg:fs-800'>
-                    <p className='text-gray-500'>(15)</p>
-                    <p className='ml-3 fw-600'>1,801,000</p>
+                    <p className='text-gray-500'>({Math.trunc(data.total.count)})</p>
+                    <p className='ml-3 fw-600'>{data.total.amount}</p>
                 </div>
             </div>
         </div>

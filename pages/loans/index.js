@@ -12,6 +12,7 @@ import Image from "next/image";
 import useModal from "@/hooks/useModal";
 import LoanInterest from "@/components/loan/modals/LoanInterest";
 import {
+  useGetAllLoansQuery,
   useGetKollectRateQuery,
   useGetSaladRateQuery,
 } from "@/services/api/loanSlice";
@@ -196,12 +197,9 @@ const LoanPage = () => {
               <Link href="loans/loan-issuance" className="text-primary fw-600">
                 See all
               </Link>
-              <p className="flex items-center border border-gray-400 px-3 ml-10 rounded-md fw-500">
-                Filter <BsFilter className="ml-1" />
-              </p>
             </div>
           </div>
-          <div className="">
+          <div className="w-full overflow-x-hidden">
             <LoanInsuranceTable />
           </div>
         </div>
