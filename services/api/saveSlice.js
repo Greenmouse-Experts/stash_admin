@@ -28,11 +28,23 @@ export const savingsApiSlice = apiSlice.injectEndpoints({
       }),
       keepUnusedDataFor: ENDPOINT.CACHE_LIFETIME.DEFAULT,
     }),
+
+    getCustomerGoalSave: builder.query({
+      query: (id) => ({
+        url: `${ENDPOINT.GET_CUSTOMER_GOAL_SAVING}/${id}`,
+        method: ENDPOINT.HTTP_METHODS.GET,
+        headers: {
+            Authorization: requestAuthorization(),
+          },
+      }),
+      keepUnusedDataFor: ENDPOINT.CACHE_LIFETIME.TINY,
+    }),
   }),
   overrideExisting: true,
 });
 
 export const {
     useGetSavingsRateQuery,
-    useLazyUpdateSavingsRateQuery
+    useLazyUpdateSavingsRateQuery,
+    useGetCustomerGoalSaveQuery
 } = savingsApiSlice

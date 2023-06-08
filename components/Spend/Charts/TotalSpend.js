@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic'
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
-const TotalSpendChart = () => {
+const TotalSpendChart = ({data}) => {
 
     const options = { 
         labels: ["Success", "Failed"] ,
@@ -17,7 +17,7 @@ const TotalSpendChart = () => {
          },
     
     };
-    const series = [2000, 650,]; //our data
+    const series = [Number(data?.percentage.main_spend_count), Number(data?.percentage.business_spend_count),]; //our data
 
   return (
     <div>
@@ -30,19 +30,19 @@ const TotalSpendChart = () => {
             <div className='flex items-center justify-between'>
                 <div className='flex items-center'>
                     <p className='w-4 h-4 circle bg-primary'></p>
-                    <p className='pl-2 text-gray-500'>Success</p>
+                    <p className='pl-2 text-gray-500'>Main</p>
                 </div>
                 <div className='flex items-center '>
-                    <p className='ml-3 fw-600'>70%</p>
+                    <p className='ml-3 fw-600'>{data?.percentage.main}%</p>
                 </div>
             </div>
             <div className='flex mt-3 items-center justify-between'>
                 <div className='flex items-center'>
                     <p className='w-4 h-4 circle bg-red-600'></p>
-                    <p className='pl-2 text-gray-500'>Failed</p>
+                    <p className='pl-2 text-gray-500'>Business</p>
                 </div>
                 <div className='flex items-center '>
-                    <p className='ml-3 fw-600'>30%</p>
+                    <p className='ml-3 fw-600'>{data?.percentage.business}%</p>
                 </div>
             </div>
         </div>

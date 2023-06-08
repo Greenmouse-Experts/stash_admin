@@ -43,7 +43,7 @@ function GlobalFilter({
   );
 }
 
-const Table = ({ columns, data }) => {
+const Table = ({ columns, data, nofilter, next, prev }) => {
   const {
     getTableProps,
     getTableBodyProps,
@@ -74,24 +74,26 @@ const Table = ({ columns, data }) => {
 
   return (
     <>
-      <div className="lg:flex items-center mb-5 relative z-10 w-6/12">
-        <GlobalFilter
-          preGlobalFilteredRows={preGlobalFilteredRows}
-          globalFilter={state.globalFilter}
-          setGlobalFilter={setGlobalFilter}
-        />
-        <div className="flex justify-between relative -left-6 md:left-0 mt-3 lg:mt-0 lg:justify-end">
-          {headerGroups.map((headerGroup) =>
-            headerGroup.headers.map((column) =>
-              column.Filter ? (
-                <div className="fs-500 px-3 py-2 " key={column.id}>
-                  {column.render("Filter")}
-                </div>
-              ) : null
-            )
-          )}
+      {!nofilter && (
+        <div className="lg:flex items-center mb-5 relative z-10 w-6/12">
+          <GlobalFilter
+            preGlobalFilteredRows={preGlobalFilteredRows}
+            globalFilter={state.globalFilter}
+            setGlobalFilter={setGlobalFilter}
+          />
+          <div className="flex justify-between relative -left-6 md:left-0 mt-3 lg:mt-0 lg:justify-end">
+            {headerGroups.map((headerGroup) =>
+              headerGroup.headers.map((column) =>
+                column.Filter ? (
+                  <div className="fs-500 px-3 py-2 " key={column.id}>
+                    {column.render("Filter")}
+                  </div>
+                ) : null
+              )
+            )}
+          </div>
         </div>
-      </div>
+      )}
       <div className="mt-2 flex flex-col">
         <div className="-my-2 overflow-x-auto -mx-4 sm:-mx-6 lg:-mx-8">
           <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -141,63 +143,83 @@ const Table = ({ columns, data }) => {
           </div>
         </div>
       </div>
-      <div className="pagination mt-8 lg:flex justify-between items-center bg-light fs-500 px-3 py-2 lg:py-2 rounded-lg">
-        <div className="flex items-center lg:w-6/12">
-          <div className="pr-5">
-            <span>
-              Page{" "}
-              <strong>
-                {state.pageIndex + 1} of {pageOptions.length}
-              </strong>{" "}
-            </span>
-          </div>
-          <div className="w-20">
-            <select
-              value={state.pageSize}
-              onChange={(e) => {
-                setPageSize(Number(e.target.value));
-              }}
-              className="bg-light border border-gray-400 rounded-md p-1"
+      {nofilter && (
+        <div className="pagination mt-8 lg:flex justify-end items-center bg-light fs-500 px-3 py-2 lg:py-2 rounded-lg">
+          <div className="flex lg:mt-0 mt-4 justify-center gap-2">
+            <button
+              className="border border-gray-400 w-7 h-7 grid place-content-center circle bg-primary text-white text-xl"
+              onClick={prev}
             >
-              {[5, 10, 20].map((pageSize) => (
-                <option key={pageSize} value={pageSize}>
-                  Show {pageSize}
-                </option>
-              ))}
-            </select>
+              <FaAngleLeft />
+            </button>{" "}
+            <button
+              className="border border-gray-400 w-7 h-7 grid place-content-center circle bg-primary text-white text-xl"
+              onClick={next}
+            >
+              <FaAngleRight />
+            </button>{" "}
           </div>
         </div>
-        <div className="flex lg:mt-0 mt-4 justify-center gap-2">
-          <button
-            className="border border-gray-400 w-7 h-7 grid place-content-center circle bg-primary text-white text-xl"
-            onClick={() => gotoPage(0)}
-            disabled={!canPreviousPage}
-          >
-            <FaAngleDoubleLeft />
-          </button>{" "}
-          <button
-            className="border border-gray-400 w-7 h-7 grid place-content-center circle bg-primary text-white text-xl"
-            onClick={() => previousPage()}
-            disabled={!canPreviousPage}
-          >
-            <FaAngleLeft />
-          </button>{" "}
-          <button
-            className="border border-gray-400 w-7 h-7 grid place-content-center circle bg-primary text-white text-xl"
-            onClick={() => nextPage()}
-            disabled={!canNextPage}
-          >
-            <FaAngleRight />
-          </button>{" "}
-          <button
-            className="border border-gray-400 w-7 h-7 grid place-content-center circle bg-primary text-white text-xl"
-            onClick={() => gotoPage(pageCount - 1)}
-            disabled={!canNextPage}
-          >
-            <FaAngleDoubleRight />
-          </button>
+      )}
+      {!nofilter && (
+        <div className="pagination mt-8 lg:flex justify-between items-center bg-light fs-500 px-3 py-2 lg:py-2 rounded-lg">
+          <div className="flex items-center lg:w-6/12">
+            <div className="pr-5">
+              <span>
+                Page{" "}
+                <strong>
+                  {state.pageIndex + 1} of {pageOptions.length}
+                </strong>{" "}
+              </span>
+            </div>
+            <div className="w-20">
+              <select
+                value={state.pageSize}
+                onChange={(e) => {
+                  setPageSize(Number(e.target.value));
+                }}
+                className="bg-light border border-gray-400 rounded-md p-1"
+              >
+                {[5, 10, 20].map((pageSize) => (
+                  <option key={pageSize} value={pageSize}>
+                    Show {pageSize}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="flex lg:mt-0 mt-4 justify-center gap-2">
+            <button
+              className="border border-gray-400 w-7 h-7 grid place-content-center circle bg-primary text-white text-xl"
+              onClick={() => gotoPage(0)}
+              disabled={!canPreviousPage}
+            >
+              <FaAngleDoubleLeft />
+            </button>{" "}
+            <button
+              className="border border-gray-400 w-7 h-7 grid place-content-center circle bg-primary text-white text-xl"
+              onClick={() => previousPage()}
+              disabled={!canPreviousPage}
+            >
+              <FaAngleLeft />
+            </button>{" "}
+            <button
+              className="border border-gray-400 w-7 h-7 grid place-content-center circle bg-primary text-white text-xl"
+              onClick={() => nextPage()}
+              disabled={!canNextPage}
+            >
+              <FaAngleRight />
+            </button>{" "}
+            <button
+              className="border border-gray-400 w-7 h-7 grid place-content-center circle bg-primary text-white text-xl"
+              onClick={() => gotoPage(pageCount - 1)}
+              disabled={!canNextPage}
+            >
+              <FaAngleDoubleRight />
+            </button>
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 };
@@ -243,16 +265,21 @@ export function SelectColumnFilter({
 }
 
 export const BooleanFilter = ({ column }) => {
-  const [filterValue, setFilterValue] = React.useState(column.filterValue || '');
+  const [filterValue, setFilterValue] = React.useState(
+    column.filterValue || ""
+  );
 
-  const onChange = event => {
+  const onChange = (event) => {
     setFilterValue(event.target.value);
     column.setFilter(event.target.value || undefined);
   };
 
   return (
-    <select value={filterValue} onChange={onChange}
-    className="text-gray-700 outline-none font-light border border-gray-400 rounded-md p-2">
+    <select
+      value={filterValue}
+      onChange={onChange}
+      className="text-gray-700 outline-none font-light border border-gray-400 rounded-md p-2"
+    >
       <option value="">Filter by Status</option>
       <option value="true">Active</option>
       <option value="false">InActive</option>

@@ -309,7 +309,7 @@ const Details = ({ data, refetch }) => {
         </div>
         <div className="bg-white min-h-96 p-8 rounded shade">
           {open === 1 ? <CustomerSave /> : ""}
-          {open === 2 ? <CustomerSpend /> : ""}
+          {open === 2 ? <CustomerSpend id={data?._id}/> : ""}
           {open === 3 ? <CustomerLoan /> : ""}
           {open === 4 ? <ProfileInfo data={data} refetch={refetch}/> : ""}
           {open === 5 ? <Transaction /> : ""}
