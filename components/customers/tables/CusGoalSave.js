@@ -76,6 +76,11 @@ const CustomerGoalSavingsTable = ({ exports, filter, id }) => {
         accessor: (row, index) => index + 1, //RDT provides index by default
       },
       {
+        Header: "Title",
+        accessor: "title",
+        Cell: (props) => <p className='capitalize'>{props.value}</p>,
+      },
+      {
         Header: "Amount",
         accessor: "amount",
         Cell: (props) => formatAsNgnMoney(props.value),
