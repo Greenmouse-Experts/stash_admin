@@ -1,11 +1,79 @@
 import { EmptyState1 } from "@/components/UI/emptyStates";
-import React from "react";
+import React, { useState } from "react";
+import CustomerGoalSavingsTable from "../tables/CusGoalSave";
+import CustomerMainSavingTable from "../tables/CusMainSave";
+import CustomerFixedSavingsTable from "../tables/CusFixedSave";
 // import { BsFilter } from "react-icons/bs";
 
 const CustomerSave = () => {
+  const [open, setOpen] = useState(1);
+
+  const handleOpen = (value) => {
+    setOpen(open === value ? value : value);
+  };
+  const activeStyle = {
+    borderBottom: "4px solid #6B5AED",
+    color: "black",
+    transition: "0.6s",
+  };
   return (
     <div>
-        <EmptyState1 message="No Savings Data Yet"/>
+      {/* <EmptyState1 message="No Savings Data Yet" /> */}
+      <div className="mt-1 lg:flex ">
+        <div className="w-full lg:w-2/12 bg-gray-50 rounded">
+          <ul className="text-gray-400 fs-500 p-4">
+            <li
+              className="nav-item py-2 lg:py-2 cursor-pointer fs-800"
+              style={open === 1 ? activeStyle : undefined}
+              onClick={() => handleOpen(1)}
+            >
+              <span className="">Goal Savings</span>
+            </li>
+            <li
+              className="nav-item py-2 lg:py-2 cursor-pointer fs-800"
+              style={open === 2 ? activeStyle : undefined}
+              onClick={() => handleOpen(2)}
+            >
+              <span className="">Main Savings</span>
+            </li>
+            <li
+              className="nav-item py-2 lg:py-2 cursor-pointer fs-800"
+              style={open === 3 ? activeStyle : undefined}
+              onClick={() => handleOpen(3)}
+            >
+              <span className="">Fixed Savings</span>
+            </li>
+            <li
+              className="nav-item py-2 lg:py-2 cursor-pointer fs-800"
+              style={open === 4 ? activeStyle : undefined}
+              onClick={() => handleOpen(4)}
+            >
+              <span className="">SAYS</span>
+            </li>
+            <li
+              className="nav-item py-2 lg:py-2 cursor-pointer fs-800"
+              style={open === 5 ? activeStyle : undefined}
+              onClick={() => handleOpen(5)}
+            >
+              <span className="">SAFO</span>
+            </li>
+            <li
+              className="nav-item py-2 lg:py-2 cursor-pointer fs-800"
+              style={open === 6 ? activeStyle : undefined}
+              onClick={() => handleOpen(6)}
+            >
+              <span className="">SAFO</span>
+            </li>
+          </ul>
+        </div>
+        <div className="bg-white min-h-96 p-8 rounded lg:w-10/12">
+          {open === 1 ? <CustomerGoalSavingsTable /> : ""}
+          {open === 2 ? <CustomerMainSavingTable /> : ""}
+          {open === 3 ? <CustomerFixedSavingsTable /> : ""}
+          {open === 4 ? <CustomerMainSavingTable /> : ""}
+          {open === 5 ? <CustomerMainSavingTable /> : ""}
+        </div>
+      </div>
       {/* <div>
         <div className="flex justify-end items-center">
           <p className="flex items-center border border-gray-400 px-3 ml-10 rounded-md fw-500">

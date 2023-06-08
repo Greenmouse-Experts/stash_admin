@@ -37,15 +37,21 @@ export const GET_ALL_RESTRICTED = "/customer-service/admin/restricted/customers"
 export const DEACTIVATE_USER = "/customer-service/admin/deactivate"
 export const ACTIVATE_USER = "/customer-service/admin/activate"
 export const GET_ALL_DEACTIVATED = "/customer-service/admin/deactivated/customers"
+export const GET_CUSTOMER_SPEND = "/spend-service/admin/spends"
 
 // savings
 export const GET_SAVINGS_RATE = "/save-service/admin/save/rates"
 export const UPDATE_SAVINGS_RATE = "/save-service/admin/save/rates"
+export const GET_CUSTOMER_GOAL_SAVING = "/save-service/admin/save/goal"
 
 // loans
 export const GET_SALAD_RATE = "/loan-service/admin/plan/view/SALAD"
 export const GET_KOLLECT_RATE = "/loan-service/admin/plan/view/KOLLECT"
 export const UPDATE_LOAN_RATE = "/loan-service/admin/plan/update"
+
+// spend
+export const GET_SPEND_ANALYTICS = "/spend-service/admin/analytics"
+export const GET_ALL_SPEND = "/spend-service/admin/spends"
 
 
 // routine urls
