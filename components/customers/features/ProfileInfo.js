@@ -331,7 +331,7 @@ const ProfileInfo = ({data, refetch}) => {
               <input
                 type="email"
                 className="p-3 rounded border mt-2 border-gray-400 w-full"
-                value={`${(data?.card[0]?.card_number).slice(0,4)} **** **** ${(data?.card[0]?.card_number).slice(12,16)}`}
+                value={data?.card[0]?.card_number && `${(data?.card[0]?.card_number).slice(0,4)} **** **** ${(data?.card[0]?.card_number).slice(12,16)}`}
               />
             </div>
           </div>
