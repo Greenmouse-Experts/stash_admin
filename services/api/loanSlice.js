@@ -29,6 +29,28 @@ export const loanApiSlice = apiSlice.injectEndpoints({
       keepUnusedDataFor: ENDPOINT.CACHE_LIFETIME.EXTENDED,
     }),
 
+    getLoansRate: builder.query({
+      query: () => ({
+        url: `${ENDPOINT.GET_ALL_LOAN_RATE}`,
+        method: ENDPOINT.HTTP_METHODS.GET,
+        headers: {
+            Authorization: requestAuthorization(),
+          },
+      }),
+      keepUnusedDataFor: ENDPOINT.CACHE_LIFETIME.EXTENDED,
+    }),
+
+    getExportData: builder.query({
+      query: () => ({
+        url: `${ENDPOINT.EXPORT_LOAN_DETAILS}`,
+        method: ENDPOINT.HTTP_METHODS.GET,
+        headers: {
+            Authorization: requestAuthorization(),
+          },
+      }),
+      keepUnusedDataFor: ENDPOINT.CACHE_LIFETIME.EXTENDED,
+    }),
+
     updateLoanRate: builder.query({
       query: ({type, payload}) => ({
         url: `${ENDPOINT.UPDATE_LOAN_RATE}/${type}`,
@@ -50,13 +72,29 @@ export const loanApiSlice = apiSlice.injectEndpoints({
       }),
       keepUnusedDataFor: ENDPOINT.CACHE_LIFETIME.EXTENDED,
     }),
+
+    updateLoanStatus: builder.query({
+      query: (payload) => ({
+        url: `${ENDPOINT.UPDATE_LOAN_STATUS}/${payload.type}/${payload.id}/status`,
+        method: ENDPOINT.HTTP_METHODS.POST,
+        headers: {
+            Authorization: requestAuthorization(),
+          },
+          body: {
+            message: payload.msg,
+          },
+      }),
+    }),
   }),
   overrideExisting: true,
 });
 
 export const {
     useGetSaladRateQuery,
+    useGetLoansRateQuery,
     useGetKollectRateQuery,
     useLazyUpdateLoanRateQuery,
-    useGetAllLoansQuery
+    useGetAllLoansQuery,
+    useLazyUpdateLoanStatusQuery,
+    useGetExportDataQuery
 } = loanApiSlice

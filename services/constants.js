@@ -50,6 +50,9 @@ export const GET_SALAD_RATE = "/loan-service/admin/plan/view/SALAD"
 export const GET_KOLLECT_RATE = "/loan-service/admin/plan/view/KOLLECT"
 export const UPDATE_LOAN_RATE = "/loan-service/admin/plan/update"
 export const GET_ALL_LOANS = "/loan-service/admin/loans"
+export const UPDATE_LOAN_STATUS = "/loan-service/admin"
+export const GET_ALL_LOAN_RATE = '/loan-service/admin/plans'
+export const EXPORT_LOAN_DETAILS = '/loan-service/admin/loans-export'
 
 // spend
 export const GET_SPEND_ANALYTICS = "/spend-service/admin/analytics"

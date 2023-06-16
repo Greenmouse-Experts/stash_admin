@@ -18,17 +18,25 @@ import {
 } from "@/components/formats/formatItem";
 import Table from "@/components/UI/table";
 import { PreLoader } from "@/components/UI/spinners";
-import { useGetAllLoansQuery } from "@/services/api/loanSlice";
+import {
+  useGetAllLoansQuery,
+  useLazyUpdateLoanStatusQuery,
+} from "@/services/api/loanSlice";
 import Link from "next/link";
 import Image from "next/image";
 import { Initials } from "@/components/UI/tableInitials";
+import { encryptPayload } from "@/services/helpers";
 
 const LoanInsuranceTable = () => {
-  const { data: loans, isLoading: isBusy } = useGetAllLoansQuery();
+  const { data: loans, isLoading: isBusy, refetch } = useGetAllLoansQuery();
   const { Modal, setShowModal } = useModal();
   const { Modal: DeclineModal, setShowModal: setShowDeclineModal } = useModal();
   const { Modal: AcceptModal, setShowModal: setShowAcceptModal } = useModal();
+  const { Modal: ReviewsModal, setShowModal: setShowReviewsModal } = useModal();
+  const { Modal: DisburseModal, setShowModal: setShowDisburseModal } =
+    useModal();
   const [val, setVal] = useState();
+  const [setStatus] = useLazyUpdateLoanStatusQuery();
 
   const acceptOption = (value) => {
     setShowAcceptModal(true);
@@ -38,13 +46,42 @@ const LoanInsuranceTable = () => {
     setShowDeclineModal(true);
     setVal(value);
   };
-  const acceptLoan = (value) => {
-    toast.success(value);
-    setShowAcceptModal(false);
+  const reviewOption = (value) => {
+    setShowReviewsModal(true);
+    setVal(value);
   };
-  const declineLoan = (value) => {
-    toast.success(value);
+  const disbursedOption = (value) => {
+    setShowDisburseModal(true);
+    setVal(value);
+  };
+  const closeAllModal = () => {
+    setShowAcceptModal(false);
     setShowDeclineModal(false);
+    setShowReviewsModal(false);
+    setShowDisburseModal(false)
+  };
+  const changeLoanStatus = async (value, type) => {
+    const status = {
+      status: type,
+    };
+    const message = encryptPayload(status);
+    const payload = {
+      msg: message,
+      type: value.type,
+      id: value._id,
+    };
+    await setStatus(payload)
+      .then((res) => {
+        if (res.isSuccess) {
+          toast.success(res.data.msg);
+          closeAllModal();
+          refetch();
+        }
+      })
+      .catch((err) => {
+        toast.error(err.error.msg || err.error.data.msg);
+      });
+    closeAllModal();
   };
 
   const columns = useMemo(
@@ -122,11 +159,6 @@ const LoanInsuranceTable = () => {
         Cell: (props) => FormatStatus[props.value],
       },
       {
-        Header: "Amount Approved",
-        accessor: "",
-        Cell: (props) => formatAsNgnMoney[props.value],
-      },
-      {
         Header: "Date",
         accessor: "createdAt",
         Cell: (props) => formatDate(props.value),
@@ -142,17 +174,18 @@ const LoanInsuranceTable = () => {
               </Button>
             </MenuHandler>
             <MenuList>
-              <MenuItem
-                onClick={() => acceptOption("user loan has been accepted")}
-              >
+              <MenuItem onClick={() => reviewOption(row.row.original)}>
+                Review
+              </MenuItem>
+              <MenuItem onClick={() => acceptOption(row.row.original)}>
                 Accept
               </MenuItem>
-              <MenuItem
-                onClick={() => declineOption("user loan has been declined")}
-              >
+              <MenuItem onClick={() => declineOption(row.row.original)}>
                 Decline
               </MenuItem>
-              <MenuItem onClick={() => setShowModal(true)}>Review</MenuItem>
+              <MenuItem onClick={() => disbursedOption(row.row.original)}>
+                Disbursed
+              </MenuItem>
             </MenuList>
           </Menu>
         ),
@@ -161,7 +194,7 @@ const LoanInsuranceTable = () => {
     []
   );
 
-  const list = useMemo(() => loans?.data, [loans?.data]);
+  const list = useMemo(() => loans?.data?.data, [loans?.data?.data]);
 
   return (
     <div className="mt-8">
@@ -188,7 +221,7 @@ const LoanInsuranceTable = () => {
           cancelTitle="No, cancel"
           actionTitle="Yes, accept"
           closeModal={() => setShowAcceptModal(false)}
-          action={() => acceptLoan(val)}
+          action={() => changeLoanStatus(val, "approved")}
         />
       </AcceptModal>
       <DeclineModal title="" noHead>
@@ -197,9 +230,27 @@ const LoanInsuranceTable = () => {
           cancelTitle="No, cancel"
           actionTitle="Yes, decline"
           closeModal={() => setShowDeclineModal(false)}
-          action={() => declineLoan(val)}
+          action={() => changeLoanStatus(val, "declined")}
         />
       </DeclineModal>
+      <ReviewsModal title="" noHead>
+        <ReusableModal
+          title="Do you want to switch loan status to under review?"
+          cancelTitle="No, cancel"
+          actionTitle="Yes, accept"
+          closeModal={() => setShowReviewsModal(false)}
+          action={() => changeLoanStatus(val, "under-review")}
+        />
+      </ReviewsModal>
+      <DisburseModal title="" noHead>
+        <ReusableModal
+          title="Do you want to switch loan status to disbursed?"
+          cancelTitle="No, cancel"
+          actionTitle="Yes, accept"
+          closeModal={() => setShowDisburseModal(false)}
+          action={() => changeLoanStatus(val, "disbursed")}
+        />
+      </DisburseModal>
     </div>
   );
 };
