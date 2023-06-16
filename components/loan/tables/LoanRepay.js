@@ -1,59 +1,14 @@
 import React from "react";
 import { useGetExportDataQuery } from "@/services/api/loanSlice";
-import CsvDownloadButton from 'react-json-to-csv'
-import json2csv from 'json2csv';
-import { ExportToCsv } from 'csv-export';
 import { Button } from "@/components/UI/button";
 
 
 const LoanRepayTable = () => {
   const { data: repays, isLoading } = useGetExportDataQuery();
-  const filename = "Loan Repayments File";
-  const fields = [
-    "Staff Id",
-    "Name of Organisation",
-   "Staff Code",
-    "Monthly Payment Due",
-  ]
-    
-  const style = {
-    padding: "5px",
-    border: "1px solid gray",
-  };
-  const text = "Downloand Repayment File";
-  function convertToCSV(json) {
-    const fields = [
-        "Staff Id",
-        "Name of Organisation",
-       "Staff Code",
-        "Monthly Payment Due",
-      ]
-    const csv = json2csv({ data: json, fields }); // convert the JSON to CSV using the json2csv package
-    return csv;
-  }
-  function downloadCSV(json) {
-    const csv = convertToCSV(json);
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'data.csv';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  }
-  function handleExport() {
-    const csvExporter = new ExportToCsv();
-    csvExporter.generateCsv(repays.data);
-  }
 
   return (
     <>
       <div className="mb-16">
-        {repays && (
-        //   <CsvDownloadButton data={repays.data} delimiter="," filename={filename} headers={fields}/>
-        <Button title='Download CSV' onClick={() => handleExport()}/>
-        )}
       </div>
       <div className="overflow-x-scroll mt-8">
         <table className="min-w-full text-left">
