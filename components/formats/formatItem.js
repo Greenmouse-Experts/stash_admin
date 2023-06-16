@@ -2,6 +2,7 @@ import dayjs from "dayjs"
 
 export const FormatStatus =  {
     "pending": <p className="w-28 fs-500 rounded fw-500 text-center border border-yellow-800 bg-yellow-50 text-yellow-800 py-1">Pending</p>,
+    "under-review" : <p className="w-28 fs-500 rounded fw-500 text-center border border-blue-800 bg-blue-50 text-blue-800 py-1">Reviewing</p>,
     "approved" : <p className="w-28 fs-500 rounded fw-500 text-center border border-green-800 bg-green-50 text-green-800 py-1">Approved</p>,
     "declined": <p className="w-28 fs-500 rounded fw-500 text-center border border-red-800 bg-red-50 text-red-800 py-1">Declined</p>,
     "default": <p className="w-28 fs-500 rounded fw-500 text-center border border-red-800 bg-red-50 text-red-800 py-1">Default</p>,

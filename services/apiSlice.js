@@ -47,7 +47,6 @@ const refreshTokens = async () => {
     },
   })
   const data = await response.json()
-  console.log(data);
   if (data.error === 0) {
         store.dispatch(
           saveAuth({

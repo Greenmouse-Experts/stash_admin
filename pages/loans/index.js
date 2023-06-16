@@ -14,20 +14,23 @@ import LoanInterest from "@/components/loan/modals/LoanInterest";
 import {
   useGetAllLoansQuery,
   useGetKollectRateQuery,
+  useGetLoansRateQuery,
   useGetSaladRateQuery,
 } from "@/services/api/loanSlice";
 
 const LoanPage = () => {
-  const {
-    data: salad,
-    isLoading: saladLoading,
-    refetch: refetchSalad,
-  } = useGetSaladRateQuery();
-  const {
-    data: kollect,
-    isLoading: kollectLoading,
-    refetch: refetchKollect,
-  } = useGetKollectRateQuery();
+
+  const {data:rate, isLoading:rateLoading, refetch:refetchRate} = useGetLoansRateQuery()
+  // const {
+  //   data: salad,
+  //   isLoading: saladLoading,
+  //   refetch: refetchSalad,
+  // } = useGetSaladRateQuery();
+  // const {
+  //   data: kollect,
+  //   isLoading: kollectLoading,
+  //   refetch: refetchKollect,
+  // } = useGetKollectRateQuery();
   const { Modal, setShowModal, showModal } = useModal();
   const {
     Modal: KollectModal,
@@ -54,7 +57,7 @@ const LoanPage = () => {
                   height={100}
                 />
                 <p className="fw-600 text-primary">
-                  {salad && `${salad.data.interest_rate}%`} monthly
+                  {rate && `${rate?.data[0].interest_rate}%`} monthly
                 </p>
               </div>
             </div>
@@ -130,7 +133,7 @@ const LoanPage = () => {
                   height={100}
                 />
                 <p className="fw-600 text-primary">
-                  {kollect && `${kollect.data.interest_rate}%`} monthly
+                  {rate && `${rate?.data[1].interest_rate}%`} monthly
                 </p>
               </div>
             </div>
@@ -223,16 +226,16 @@ const LoanPage = () => {
           <LoanInterest
             closeModal={() => setShowModal(false)}
             type="SALAD"
-            refetch={refetchSalad}
-            rate={salad?.data?.interest_rate}
+            refetch={refetchRate}
+            rate={rate?.data[0]?.interest_rate}
           />
         </Modal>
         <KollectModal title="Change Kollect Loan Interest Rate">
           <LoanInterest
             closeModal={() => setShowKollectModal(false)}
             type="KOLLECT"
-            refetch={refetchKollect}
-            rate={kollect?.data?.interest_rate}
+            refetch={refetchRate}
+            rate={rate?.data[1]?.interest_rate}
           />
         </KollectModal>
       </div>

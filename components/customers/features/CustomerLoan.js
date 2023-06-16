@@ -3,6 +3,9 @@ import React from "react";
 // import { BsFilter } from "react-icons/bs";
 
 const CustomerLoan = () => {
+
+  const {data, isLoading, isError} = useGetCustomerSpendQuery(id)
+  
   return (
     <div>
       <EmptyState1 message="No Loan Data Yet" />
