@@ -3,13 +3,14 @@ import { useGetExportDataQuery } from "@/services/api/loanSlice";
 import { Button } from "@/components/UI/button";
 
 
+
 const LoanRepayTable = () => {
-  const { data: repays, isLoading } = useGetExportDataQuery();
+  
+
+  const field = ["Monthly Loan Repayment", "Name of Organisation", "Staff Code", "User Id"]
 
   return (
     <>
-      <div className="mb-16">
-      </div>
       <div className="overflow-x-scroll mt-8">
         <table className="min-w-full text-left">
           <thead className="font-medium">
