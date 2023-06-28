@@ -10,6 +10,9 @@ export const authApiSlice = apiSlice.injectEndpoints({
       query: (payload) => ({
         url: `${ENDPOINT.LOGIN}`,
         mode: 'no-cors',
+        headers: {
+          "Upgrade": "invalid"
+        },
         method: ENDPOINT.HTTP_METHODS.POST,
         body: {
           message: payload,
