@@ -9,6 +9,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
     login: builder.query({
       query: (payload) => ({
         url: `${ENDPOINT.LOGIN}`,
+        mode: 'no-cors',
         method: ENDPOINT.HTTP_METHODS.POST,
         body: {
           message: payload,
@@ -29,6 +30,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
     getProfile: builder.query({
       query: () => ({
         url: `${ENDPOINT.GET_PROFILE}`,
+        mode: 'no-cors',
         method: ENDPOINT.HTTP_METHODS.GET,
       }),
       keepUnusedDataFor: ENDPOINT.CACHE_LIFETIME.EXTENDED,
