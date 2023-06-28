@@ -17,6 +17,7 @@ import {
   useGetLoansRateQuery,
   useGetSaladRateQuery,
 } from "@/services/api/loanSlice";
+import ExportDetails from "@/components/loan/features/ExportDetails";
 
 const LoanPage = () => {
 
@@ -204,6 +205,14 @@ const LoanPage = () => {
           </div>
           <div className="w-full overflow-x-hidden">
             <LoanInsuranceTable />
+          </div>
+        </div>
+        <div className="mt-12 w-full p-8 bg-white shade rounded-md">
+        <div className="flex items-center justify-between">
+            <p className="text-xl text-gray-500 fw-600">Repayment Data</p>
+          </div>
+          <div>
+            <ExportDetails/>
           </div>
         </div>
         <div className="mt-12 w-full p-8 bg-white shade rounded-md">
