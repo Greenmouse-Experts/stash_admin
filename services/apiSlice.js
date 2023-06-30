@@ -13,7 +13,9 @@ export const apiSlice = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: BASE_URL,
     prepareHeaders: (headers, { getState }) => {
-      headers.set("Upgrade", "invalid")
+      // headers.set(Upgrade, "invalid")
+      headers.append("mode", "no-cors");
+    // headers.set("Access-Control-Allow-Headers", "X-Requested-With");
       const accessToken = getState().auth.auth.token; // replace with your own selector
       if (accessToken) {
         headers.set("Authorization", `Bearer ${accessToken}`);
